@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>サロン経営課題診断 | エステティック通信</title>
-<meta name="description" content="8つの質問に答えるだけで、あなたのサロンの伸ばすべきポイントをレーダーチャートで診断します。" />
-<meta property="og:title" content="サロン経営課題診断｜エステティック通信" />
-<meta property="og:description" content="2分でわかる、あなたのサロンの伸びしろ診断" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>サロン経営タイプ診断 | エステティック通信</title>
+<meta name="description" content="8つの二択に答えるだけで、あなたのサロン経営タイプが16タイプの中からわかる無料診断。" />
+<meta property="og:title" content="サロン経営タイプ診断｜エステティック通信" />
+<meta property="og:description" content="2分でわかる、あなたのサロン経営スタイル16タイプ診断" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -27,85 +27,94 @@
 
     <!-- ===== SCREEN: INTRO ===== -->
     <section class="screen screen-intro" id="screen-intro" data-screen>
-      <div class="intro-icon" aria-hidden="true">
-        <svg viewBox="0 0 120 120" width="88" height="88">
-          <circle cx="50" cy="50" r="34" fill="none" stroke="var(--accent)" stroke-width="8"/>
-          <line x1="74" y1="74" x2="104" y2="104" stroke="var(--accent)" stroke-width="10" stroke-linecap="round"/>
-          <path d="M38 52 L48 62 L66 40" fill="none" stroke="var(--accent-2)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <div class="intro-badge" aria-hidden="true">
+        <span class="badge-letters" id="badgeSample">????</span>
       </div>
-      <p class="eyebrow">30秒 × 8問 / 無料</p>
-      <h1>サロン<br>経営課題<span class="accent-underline">診断</span></h1>
-      <p class="intro-lead">タップするだけで、<br>あなたのサロンの「伸ばすべきポイント」を<br>4つのグラフで可視化します。</p>
+      <p class="eyebrow">30秒 × 8問 / 無料・16タイプ診断</p>
+      <h1>サロン経営<span class="accent-underline">タイプ</span>診断</h1>
+      <p class="intro-lead">2択でサクサク答えるだけ。<br>あなたの経営スタイルが<br><strong>16タイプ</strong>のどれかがわかります。</p>
 
-      <div class="intro-types" aria-hidden="true">
-        <div class="type-chip"><span class="type-emoji">📣</span>集客</div>
-        <div class="type-chip"><span class="type-emoji">💞</span>リピート</div>
-        <div class="type-chip"><span class="type-emoji">💰</span>利益率</div>
-        <div class="type-chip"><span class="type-emoji">⏱️</span>業務効率</div>
+      <div class="intro-mascots" aria-hidden="true">
+        <span>🦉</span><span>🦊</span><span>🌸</span><span>⭐</span>
+        <span>🦋</span><span>🎯</span><span>🌊</span><span>🌟</span>
       </div>
 
       <button class="btn btn-primary btn-lg" id="startBtn" type="button">診断をはじめる →</button>
       <p class="intro-note">回答は匿名で集計されます</p>
     </section>
 
-    <!-- ===== SCREEN: QUESTION (テンプレートはJSで描画) ===== -->
+    <!-- ===== SCREEN: QUESTION ===== -->
     <section class="screen screen-question" id="screen-question" data-screen hidden>
-      <div class="q-card">
-        <div class="q-icon" id="qIcon" aria-hidden="true"></div>
-        <p class="q-cat" id="qCat"></p>
-        <h2 class="q-text" id="qText"></h2>
+      <p class="q-axis" id="qAxis">集客スタイル</p>
+      <p class="q-hint">近い方をタップ</p>
 
-        <div class="scale" id="qScale" role="group" aria-label="5段階評価"></div>
+      <div class="choice-stack">
+        <button class="choice-card" id="choiceA" type="button">
+          <span class="choice-emoji" id="choiceAEmoji"></span>
+          <span class="choice-text" id="choiceAText"></span>
+        </button>
 
-        <div class="scale-caption">
-          <span>そう思わない</span>
-          <span>とてもそう思う</span>
-        </div>
+        <div class="choice-vs">VS</div>
+
+        <button class="choice-card" id="choiceB" type="button">
+          <span class="choice-emoji" id="choiceBEmoji"></span>
+          <span class="choice-text" id="choiceBText"></span>
+        </button>
       </div>
+
+      <button class="neutral-btn" id="choiceN" type="button">どちらも近い</button>
       <button class="btn btn-ghost" id="backBtn" type="button">← 前の質問</button>
     </section>
 
     <!-- ===== SCREEN: LOADING ===== -->
     <section class="screen screen-loading" id="screen-loading" data-screen hidden>
       <div class="spinner" aria-hidden="true"></div>
-      <p class="loading-text">診断結果を集計中…</p>
+      <p class="loading-text">16タイプの中から診断中…</p>
     </section>
 
     <!-- ===== SCREEN: RESULT ===== -->
     <section class="screen screen-result" id="screen-result" data-screen hidden>
 
       <p class="eyebrow">あなたのサロンは</p>
-      <div class="result-type" id="resultType">
-        <span class="result-emoji" id="resultEmoji">📣</span>
-        <h1 id="resultTitle">新規集客<br>ブースト型</h1>
+
+      <div class="result-header">
+        <div class="result-mascot" id="resultMascot">🦉</div>
+        <span class="type-code" id="typeCode">GPSI</span>
+        <h1 id="resultTitle">こだわり職人型</h1>
+        <p class="result-catch" id="resultCatch">新規のお客様に、自分だけの特別な一品を届ける</p>
+      </div>
+
+      <div class="standout-chip" id="standoutChip">
+        <span id="standoutEmoji">🧲</span>
+        <span>いちばん際立つ個性：<b id="standoutLabel">新規開拓</b> <span id="standoutPct">78%</span></span>
       </div>
 
       <div class="chart-card">
-        <canvas id="radarChart" width="320" height="320" role="img" aria-label="4項目のスコアレーダーチャート"></canvas>
-        <div class="chart-legend" id="chartLegend"></div>
+        <canvas id="radarChart" width="320" height="320" role="img" aria-label="4軸の個性レーダーチャート"></canvas>
+        <div class="axis-bars" id="axisBars"></div>
       </div>
 
-      <div class="weak-banner" id="weakBanner">
-        <span class="weak-icon" id="weakIcon">🔎</span>
-        <div>
-          <p class="weak-label">今いちばん伸びしろがあるのは</p>
-          <p class="weak-value" id="weakValue">集客</p>
-        </div>
+      <div class="strength-card">
+        <p class="card-heading">🌟 あなたの強み</p>
+        <div class="strength-list" id="strengthList"></div>
       </div>
 
-      <div class="advice-grid" id="adviceGrid"></div>
+      <div class="tip-card">
+        <p class="card-heading">🌱 伸ばすとさらに強くなる視点</p>
+        <p class="tip-text" id="tipText"></p>
+      </div>
 
       <div class="cta-card">
         <p class="cta-eyebrow">続きは公式LINEで</p>
-        <p class="cta-title">診断タイプ別の<br>改善アクションBOOKを無料プレゼント</p>
+        <p class="cta-title" id="ctaTitle">GPSIタイプ向けの<br>経営アクションBOOKを無料プレゼント</p>
         <a class="btn btn-line" id="lineBtn" href="#" target="_blank" rel="noopener">
           <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.5 2 2 5.8 2 10.4c0 4.1 3.6 7.6 8.4 8.3.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1.1 1 .6 1.2-.5 6.4-3.8 8.7-6.5C22.5 13.6 22 11.5 22 10.4 22 5.8 17.5 2 12 2z"/></svg>
           LINEで結果を受け取る
         </a>
-        <p class="cta-note" id="ctaNote">友だち追加は無料・いつでもブロックできます</p>
+        <p class="cta-note">友だち追加は無料・いつでもブロックできます</p>
       </div>
 
+      <button class="btn btn-secondary btn-small" id="shareBtn" type="button">🔗 結果をコピーしてシェア</button>
       <button class="btn btn-ghost btn-small" id="retryBtn" type="button">もう一度診断する</button>
     </section>
 

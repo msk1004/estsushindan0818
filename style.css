@@ -1,5 +1,5 @@
 /* ==========================================================
-   サロン経営課題診断 — style.css
+   サロン経営タイプ診断 — style.css（MBTI風・16タイプ版）
    ========================================================== */
 
 :root {
@@ -15,15 +15,13 @@
   --accent-soft: #f4e3e9;
   --accent-2: #a1731f;
   --accent-2-soft: #f3e6ce;
+  --pole-a: #7c3550;
+  --pole-b: #3c5c78;
   --line-brand: #06c755;
   --line-brand-dark: #05a648;
   --shadow: 0 1px 2px rgba(38, 34, 32, 0.05), 0 12px 28px -14px rgba(38, 34, 32, 0.22);
   --radius-lg: 22px;
   --radius-md: 14px;
-  --cat-a: #7c3550; /* 集客 */
-  --cat-b: #a1731f; /* リピート */
-  --cat-c: #3f6b52; /* 利益率 */
-  --cat-d: #3c5c78; /* 業務効率 */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,11 +38,9 @@
     --accent-soft: #3a2530;
     --accent-2: #d6a94e;
     --accent-2-soft: #3a3020;
+    --pole-a: #e08aa6;
+    --pole-b: #8fb0c9;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 28px -14px rgba(0, 0, 0, 0.6);
-    --cat-a: #e08aa6;
-    --cat-b: #d6a94e;
-    --cat-c: #7fbf9c;
-    --cat-d: #8fb0c9;
   }
 }
 
@@ -61,11 +57,9 @@
   --accent-soft: #3a2530;
   --accent-2: #d6a94e;
   --accent-2-soft: #3a3020;
+  --pole-a: #e08aa6;
+  --pole-b: #8fb0c9;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 28px -14px rgba(0, 0, 0, 0.6);
-  --cat-a: #e08aa6;
-  --cat-b: #d6a94e;
-  --cat-c: #7fbf9c;
-  --cat-d: #8fb0c9;
 }
 
 * { box-sizing: border-box; }
@@ -83,6 +77,7 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
+  touch-action: manipulation;
 }
 
 h1, h2 {
@@ -92,15 +87,15 @@ h1, h2 {
   margin: 0;
 }
 
-button { font-family: inherit; }
+button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
 
 .app {
-  max-width: 480px;
+  max-width: 440px;
   margin: 0 auto;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
+  padding: 0 18px;
 }
 
 /* ---------- Topbar ---------- */
@@ -109,11 +104,15 @@ button { font-family: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 18px 0 14px;
+  padding: 16px 0 14px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
 }
 
 .brand {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--ink-soft);
@@ -124,7 +123,7 @@ button { font-family: inherit; }
   align-items: center;
   gap: 8px;
   flex: 1;
-  max-width: 200px;
+  max-width: 220px;
   margin-left: 16px;
 }
 
@@ -138,7 +137,7 @@ button { font-family: inherit; }
 
 .progress-fill {
   height: 100%;
-  width: 12.5%;
+  width: 0%;
   background: var(--accent);
   border-radius: 999px;
   transition: width 0.35s ease;
@@ -160,8 +159,8 @@ main { flex: 1; display: flex; flex-direction: column; }
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 8px 0 40px;
-  animation: fadeUp 0.4s ease both;
+  padding: 4px 0 40px;
+  animation: fadeUp 0.35s ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -169,7 +168,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -183,48 +182,58 @@ main { flex: 1; display: flex; flex-direction: column; }
 }
 
 /* ---------- Intro ---------- */
-.intro-icon { margin: 10px 0 4px; }
+.intro-badge { margin: 14px 0 6px; }
+
+.badge-letters {
+  display: inline-flex;
+  font-family: "Yu Mincho", serif;
+  font-weight: 700;
+  font-size: 30px;
+  letter-spacing: 0.12em;
+  color: var(--surface);
+  background: var(--accent);
+  padding: 14px 20px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
 
 .screen-intro h1 {
-  font-size: 34px;
+  font-size: 32px;
   line-height: 1.35;
   color: var(--ink);
+  margin-top: 6px;
 }
 
-.accent-underline {
-  color: var(--accent);
-  position: relative;
-}
+.accent-underline { color: var(--accent); }
 
 .intro-lead {
   color: var(--ink-soft);
   font-size: 15px;
-  margin: 18px 0 22px;
+  margin: 16px 0 20px;
 }
 
-.intro-types {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 30px;
+.intro-lead strong { color: var(--accent); }
+
+.intro-mascots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto 28px;
 }
 
-.type-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.intro-mascots span {
+  font-size: 24px;
   background: var(--surface-raised);
   border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--ink-soft);
+  border-radius: 14px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: var(--shadow);
 }
-
-.type-emoji { font-size: 15px; }
 
 .intro-note {
   margin-top: 14px;
@@ -267,7 +276,15 @@ main { flex: 1; display: flex; flex-direction: column; }
   padding: 10px 14px;
 }
 
-.btn-small { font-size: 12.5px; padding: 8px 12px; }
+.btn-secondary {
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  color: var(--ink-soft);
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.btn-small { font-size: 12.5px; padding: 10px 14px; }
 
 .btn-line {
   background: var(--line-brand);
@@ -280,89 +297,93 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 .btn-line:active { background: var(--line-brand-dark); }
 
-/* ---------- Question ---------- */
-.q-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  padding: 34px 26px 30px;
-  width: 100%;
-  margin-top: 8px;
-}
-
-.q-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-  background: var(--accent-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  margin: 0 auto 16px;
-}
-
-.q-cat {
-  font-size: 11.5px;
+/* ---------- Question (MBTI風 二択カード) ---------- */
+.q-axis {
+  font-size: 12px;
   letter-spacing: 0.1em;
   color: var(--accent);
   font-weight: 700;
-  text-transform: uppercase;
-  margin: 0 0 10px;
+  margin: 18px 0 2px;
 }
 
-.q-text {
-  font-size: 19px;
-  line-height: 1.55;
-  margin: 0 0 30px;
-  color: var(--ink);
+.q-hint {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin: 0 0 22px;
 }
 
-.scale {
+.choice-stack {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
 }
 
-.scale-btn {
-  width: 46px;
-  height: 46px;
+.choice-card {
+  width: 100%;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+  text-align: center;
+}
+
+.choice-card:active { transform: scale(0.98); }
+
+.choice-card:hover { border-color: var(--accent); }
+
+.choice-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.choice-emoji { font-size: 34px; }
+
+.choice-text {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.choice-vs {
+  font-family: "Yu Mincho", serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-faint);
+  background: var(--bg);
+  border: 1px solid var(--line);
   border-radius: 50%;
-  border: 2px solid var(--line-strong);
-  background: var(--surface-raised);
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: -4px 0;
+  z-index: 1;
+}
+
+.neutral-btn {
+  margin-top: 18px;
+  background: transparent;
+  border: none;
+  color: var(--ink-faint);
+  font-size: 12.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--ink-faint);
-  transition: all 0.15s ease;
+  padding: 8px;
 }
 
-.scale-btn[data-v="1"] { width: 38px; height: 38px; }
-.scale-btn[data-v="2"] { width: 42px; height: 42px; }
-.scale-btn[data-v="4"] { width: 50px; height: 50px; }
-.scale-btn[data-v="5"] { width: 54px; height: 54px; }
-
-.scale-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-.scale-btn.selected {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  transform: scale(1.06);
-}
-
-.scale-caption {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--ink-faint);
-  padding: 0 2px;
-}
+.neutral-btn.selected { color: var(--accent); font-weight: 700; }
 
 /* ---------- Loading ---------- */
 .screen-loading { justify-content: center; gap: 18px; }
@@ -381,127 +402,135 @@ main { flex: 1; display: flex; flex-direction: column; }
 .loading-text { color: var(--ink-soft); font-size: 14px; }
 
 /* ---------- Result ---------- */
-.result-type {
+.result-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 22px;
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
-.result-emoji {
-  font-size: 44px;
-  width: 84px;
-  height: 84px;
+.result-mascot {
+  font-size: 52px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent-soft);
-  border-radius: 24px;
+  border-radius: 28px;
+  margin-bottom: 4px;
 }
 
-.result-type h1 { font-size: 26px; color: var(--ink); }
+.type-code {
+  font-family: "Yu Mincho", serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: #fff;
+  background: var(--accent);
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.result-header h1 { font-size: 25px; color: var(--ink); margin-top: 4px; }
+
+.result-catch {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  max-width: 32ch;
+  margin: 0;
+}
+
+.standout-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-2-soft);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin: 14px 0 20px;
+}
+
+.standout-chip b { color: var(--accent-2); }
+#standoutPct { font-weight: 700; color: var(--accent-2); font-variant-numeric: tabular-nums; }
 
 .chart-card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  padding: 20px 16px 22px;
+  padding: 18px 16px 20px;
   width: 100%;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 #radarChart { max-width: 100%; height: auto; }
 
-.chart-legend {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.legend-item {
+.axis-bars {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
-  color: var(--ink-soft);
-  background: var(--bg);
-  border-radius: 10px;
-  padding: 8px 10px;
-}
-
-.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-
-.legend-score {
-  margin-left: auto;
-  font-weight: 700;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-
-.weak-banner {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: var(--accent-2-soft);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
-  padding: 16px 18px;
-  width: 100%;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
   text-align: left;
 }
 
-.weak-icon {
-  font-size: 26px;
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
+.axis-bar-label {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface-raised);
-  border-radius: 14px;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
 }
 
-.weak-label { font-size: 11.5px; color: var(--ink-faint); margin: 0 0 2px; }
-.weak-value { font-size: 17px; font-weight: 700; color: var(--accent-2); margin: 0; }
+.axis-bar-label b { color: var(--ink); font-variant-numeric: tabular-nums; }
 
-.advice-grid {
+.axis-bar-track {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.axis-bar-fill-a { background: var(--pole-a); height: 100%; }
+.axis-bar-fill-b { background: var(--pole-b); height: 100%; }
+
+.strength-card, .tip-card {
   width: 100%;
-  margin-bottom: 26px;
-}
-
-.advice-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  padding: 14px 16px;
-  text-align: left;
   box-shadow: var(--shadow);
+  padding: 18px 20px;
+  text-align: left;
+  margin-bottom: 14px;
 }
 
-.advice-num {
-  font-family: "Yu Mincho", serif;
-  font-size: 20px;
+.card-heading {
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--ink-faint);
-  width: 22px;
-  flex-shrink: 0;
+  margin: 0 0 12px;
 }
 
-.advice-emoji { font-size: 22px; flex-shrink: 0; }
+.strength-list { display: flex; flex-direction: column; gap: 10px; }
 
-.advice-text { font-size: 13.5px; color: var(--ink); font-weight: 700; line-height: 1.5; }
-.advice-sub { font-size: 11.5px; color: var(--ink-faint); font-weight: 400; margin-top: 2px; }
+.strength-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.strength-emoji { font-size: 18px; flex-shrink: 0; }
+
+.tip-text { font-size: 13.5px; color: var(--ink-soft); margin: 0; line-height: 1.7; }
 
 .cta-card {
   width: 100%;
@@ -510,7 +539,7 @@ main { flex: 1; display: flex; flex-direction: column; }
   border-radius: var(--radius-lg);
   padding: 26px 22px 22px;
   box-shadow: var(--shadow);
-  margin-bottom: 18px;
+  margin: 10px 0 14px;
 }
 
 .cta-eyebrow {
@@ -546,7 +575,8 @@ main { flex: 1; display: flex; flex-direction: column; }
 }
 
 @media (max-width: 380px) {
-  .screen-intro h1 { font-size: 28px; }
-  .scale-btn { width: 40px; height: 40px; }
-  .scale-btn[data-v="5"] { width: 46px; height: 46px; }
+  .screen-intro h1 { font-size: 27px; }
+  .choice-card { padding: 22px 16px; }
+  .choice-emoji { font-size: 28px; }
+  .choice-text { font-size: 14.5px; }
 }

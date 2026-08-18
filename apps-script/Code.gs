@@ -1,8 +1,9 @@
 /**
- * サロン経営課題診断 — 回答ログ受信用 Google Apps Script
+ * サロン経営タイプ診断 — 回答ログ受信用 Google Apps Script
  *
- * 個人情報は一切受け取らず、8問のスコア（1〜5）とタイムスタンプのみを
- * 紐づけたGoogleスプレッドシートに1行追記する。
+ * 個人情報は一切受け取らず、8問の回答（A/N/B）・算出タイプ（4文字コード）・
+ * 4軸のスコア（%）とタイムスタンプのみを紐づけたGoogleスプレッドシートに
+ * 1行追記する。市場調査・リサーチ用の集計データとして利用できる。
  *
  * 【セットアップ手順】
  * 1. 記録用のGoogleスプレッドシートを新規作成する
@@ -16,7 +17,11 @@
  */
 
 const SHEET_NAME = "診断ログ";
-const HEADER = ["timestamp", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"];
+const HEADER = [
+  "timestamp", "type",
+  "axis1_pct", "axis2_pct", "axis3_pct", "axis4_pct",
+  "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8",
+];
 
 function doPost(e) {
   const sheet = getOrCreateSheet_();
@@ -30,6 +35,11 @@ function doPost(e) {
 
   const row = [
     data.ts || new Date().toISOString(),
+    data.type ?? "",
+    data.axis1_pct ?? "",
+    data.axis2_pct ?? "",
+    data.axis3_pct ?? "",
+    data.axis4_pct ?? "",
     data.q1 ?? "",
     data.q2 ?? "",
     data.q3 ?? "",
