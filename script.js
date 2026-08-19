@@ -66,24 +66,117 @@ const QUESTIONS = [
   { id: "q8", axis: 3, a: "お客様の反応を見ながら柔軟に変える", b: "計画を立てたら淡々と実行する" },
 ];
 
-const TYPE_META = {
-  GPSI: { mascot: "🦉", name: "こだわり職人型", catch: "新規のお客様に、自分だけの特別な一品を届ける" },
-  GPSD: { mascot: "🦊", name: "戦略職人型", catch: "データに裏付けられた特別メニューで新規を掴む" },
-  GPTI: { mascot: "🔥", name: "情熱ブランド型", catch: "チームの熱量で唯一無二の体験をつくる" },
-  GPTD: { mascot: "💎", name: "プロデューサー型", catch: "数字と仲間の力でブランドを設計する" },
-  GVSI: { mascot: "🐝", name: "フットワーク職人型", catch: "新しい出会いを求めて軽やかに動き回る" },
-  GVSD: { mascot: "🛠️", name: "効率職人型", catch: "仕組みと数字で新規対応をまわしきる" },
-  GVTI: { mascot: "🌸", name: "ムードメーカー型", catch: "チームの明るさで新規客をどんどん呼び込む" },
-  GVTD: { mascot: "⭐", name: "急成長リーダー型", catch: "データとチーム力でサロンを勢いよく拡げる" },
-  EPSI: { mascot: "🌙", name: "隠れ家の匠型", catch: "常連だけが知る、特別な時間を紡ぐ" },
-  EPSD: { mascot: "🎨", name: "ブランド職人型", catch: "数字に裏付けられた自分だけの世界観を育てる" },
-  EPTI: { mascot: "🦋", name: "おもてなしブランド型", catch: "チームの心遣いで唯一無二の常連体験を" },
-  EPTD: { mascot: "🧭", name: "サロン経営家型", catch: "常連との絆とデータでブランドを経営する" },
-  EVSI: { mascot: "🍃", name: "町の人気者型", catch: "気さくな人柄でご近所に愛される" },
-  EVSD: { mascot: "🌊", name: "堅実職人型", catch: "数字で裏付けた安定運営で信頼を積み重ねる" },
-  EVTI: { mascot: "🎯", name: "ファミリーサロン型", catch: "チームの温かさで居心地の良い場所をつくる" },
-  EVTD: { mascot: "🌟", name: "安定成長リーダー型", catch: "データとチームで着実にサロンを育てる" },
+/* ---------------------------------------------------------
+   ▼ 6タイプ診断（16Personalities方式のロールグループ構成を踏襲）
+   4軸の実測%を、6つの代表的な経営タイプ「セントロイド」に
+   最も近いものへ分類する（最近傍法）。
+   --------------------------------------------------------- */
+const GROUPS = {
+  miseru: { name: "魅せる系", tagline: "新規開拓と拡散に強い", accent: "#c8672c", soft: "#f7e3d1" },
+  fukameru: { name: "深める系", tagline: "関係性と世界観づくりに強い", accent: "#7c3550", soft: "#f4e3e9" },
+  sasaeru: { name: "支える系", tagline: "仕組みと安定運営に強い", accent: "#2c6b74", soft: "#dcebec" },
 };
+
+const GROUPS_DARK = {
+  miseru: { accent: "#e69257", soft: "#3a2a1c" },
+  fukameru: { accent: "#e08aa6", soft: "#3a2530" },
+  sasaeru: { accent: "#6fb9c2", soft: "#1e3236" },
+};
+
+const TYPES6 = {
+  TC: {
+    group: "miseru", mascot: "✨", name: "トレンドクリエイター型",
+    catch: "話題を作り、勢いでサロンを広げるムードメーカー",
+    vector: [20, 75, 70, 25], // [E%, V%, T%, D%]
+    overview: [
+      "新しい出会いをエネルギーに変えるタイプです。SNSや口コミの「今」の空気を読むのが得意で、思いついたらすぐ発信・すぐ実行。堅苦しい計画よりも、勢いと直感でサロンの認知を広げていきます。",
+      "チームで動くときは、周りを巻き込むムードメーカーとして力を発揮します。ただし移り気な面もあり、始めたことを最後まで仕組み化するのはやや苦手かもしれません。",
+    ],
+    strengths: ["新規のお客様を惹きつける発信力", "トレンドを察知するアンテナの高さ", "周囲を巻き込むエネルギー", "変化への抵抗の少なさ"],
+    cautions: ["常連さんへのフォローが後回しになりがち", "勢い任せで価格設計が曖昧になりやすい", "一つの施策を続ける忍耐がやや必要"],
+    quote: "迷ったらまずやってみる、が合言葉。",
+    compatible: "ST",
+  },
+  BP: {
+    group: "miseru", mascot: "🎬", name: "ブランドプロデューサー型",
+    catch: "データと世界観で、サロンをブランドに育てる",
+    vector: [15, 25, 65, 75],
+    overview: [
+      "新しいお客様を「特別な体験」で惹きつけるタイプです。感覚だけでなく、データや世界観設計にもこだわり、サロン全体を一つのブランドとして育てていく視点を持っています。",
+      "チームを率いて大きな絵を描くのが得意な一方、細かな日々のオペレーションは人に任せたいと感じることが多いでしょう。",
+    ],
+    strengths: ["高単価メニューを支えるブランド構築力", "データに基づいた新規開拓の戦略性", "チームを一つの方向へまとめる推進力", "長期的な視点での意思決定"],
+    cautions: ["現場の細かい変化に気づきにくいことがある", "理想を追い求めすぎて完成が遅れがち", "スタッフとの温度差に注意"],
+    quote: "良いものを、正しく届ける。を大切にする。",
+    compatible: "HS",
+  },
+  AR: {
+    group: "fukameru", mascot: "🎨", name: "匠のアーティスト型",
+    catch: "一人で丁寧に、特別な世界観を届ける",
+    vector: [80, 20, 20, 20],
+    overview: [
+      "一人で丁寧に、特別な価値を届けるタイプです。感覚を頼りに、お客様一人ひとりに向き合う時間を大切にします。常連さんとの深い信頼関係が、何よりの財産です。",
+      "規模の拡大よりも、質を磨き続けることに喜びを感じるタイプ。効率を求められる場面ではペースを乱されやすいかもしれません。",
+    ],
+    strengths: ["納得感のある高単価メニュー力", "一人ひとりに向き合う丁寧な対応", "隅々まで行き届いた運営の質", "独自の世界観・技術への強いこだわり"],
+    cautions: ["新規集客の発信は後回しになりがち", "一人で抱え込みすぎることがある", "忙しくなると質が下がることへの不安"],
+    quote: "量より質、を貫く職人気質。",
+    compatible: "SL",
+  },
+  HS: {
+    group: "fukameru", mascot: "🍵", name: "おもてなしの達人型",
+    catch: "チームの温かさで、常連との絆を育てる",
+    vector: [75, 70, 75, 25],
+    overview: [
+      "チームの温かさで、常連さんとの関係を育てるタイプです。効率よく多くの人に価値を届けながらも、一人ひとりとの心の距離は近く保ちます。",
+      "感覚的な対応力に優れ、場の空気を読むのが得意。一方で、数字での裏付けや仕組み化はやや苦手意識があるかもしれません。",
+    ],
+    strengths: ["また来たくなる信頼関係づくり", "回転率を活かした安定経営力", "チームで生み出す温かい接客体験", "お客様の空気を読む対応力"],
+    cautions: ["感覚に頼りすぎて振り返りが手薄になりがち", "忙しい時期はチームへの負荷が集中しやすい", "価格改定などドライな判断がやや苦手"],
+    quote: "また会いたい、と思われることを何より大切にする。",
+    compatible: "BP",
+  },
+  ST: {
+    group: "sasaeru", mascot: "📋", name: "堅実オペレーター型",
+    catch: "数字の裏付けで、一人でも堅実に運営する",
+    vector: [70, 75, 25, 75],
+    overview: [
+      "一人でも、数字の裏付けをもとに堅実にサロンを運営するタイプです。感覚に頼りすぎず、リピート率や客単価といった指標を見ながら、着実に経営を積み上げていきます。",
+      "派手さはありませんが、変化に強く、長く安定して選ばれるサロンをつくる力があります。",
+    ],
+    strengths: ["再現性のある堅実な意思決定力", "隅々まで行き届いた丁寧な運営", "地道な改善を積み重ねる継続力", "無理のない現実的な計画力"],
+    cautions: ["新しい挑戦への一歩が慎重になりがち", "発信面で存在感が埋もれやすい", "変化のスピードにやや保守的"],
+    quote: "小さな改善の積み重ね、が信条。",
+    compatible: "TC",
+  },
+  SL: {
+    group: "sasaeru", mascot: "📈", name: "システムリーダー型",
+    catch: "データとチームで、仕組みから拡大する",
+    vector: [20, 70, 70, 75],
+    overview: [
+      "データとチームの力で、サロンを仕組みから拡大していくタイプです。新しいお客様を呼び込みながら、感覚に頼らず数字で判断し、再現性のある成長を目指します。",
+      "複数店舗展開やスタッフ育成など、大きな絵を描いて実行するリーダーシップに向いています。",
+    ],
+    strengths: ["データとチーム力を掛け合わせた成長設計", "人を活かして拡げていく力", "新規集客と仕組み化の両立", "再現性のある意思決定力"],
+    cautions: ["現場の細かな感情面のケアが手薄になりやすい", "仕組み化を急ぎすぎて負担をかけることがある", "一人サロンならではの機微に鈍感になりがち"],
+    quote: "仕組みが人を自由にする、と考えるタイプ。",
+    compatible: "AR",
+  },
+};
+
+/** 4軸%（[E,V,T,D]寄り）から、最も距離の近いタイプを返す */
+function classifyType(percents) {
+  let best = null;
+  let bestDist = Infinity;
+  for (const [code, meta] of Object.entries(TYPES6)) {
+    const dist = meta.vector.reduce((sum, v, i) => sum + (v - percents[i]) ** 2, 0);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = code;
+    }
+  }
+  return best;
+}
 
 /* ---------------------------------------------------------
    ▼ 状態管理
@@ -108,9 +201,9 @@ function showScreen(id) {
    --------------------------------------------------------- */
 (async function boot() {
   const urlType = new URLSearchParams(location.search).get("type");
-  if (urlType && TYPE_META[urlType.toUpperCase()]) {
+  if (urlType && TYPES6[urlType.toUpperCase()]) {
     const code = urlType.toUpperCase();
-    renderResultFromCode(code, axisPercentsFromCode(code), null);
+    renderResultFromCode(code, TYPES6[code].vector, null);
     showScreen("screen-result");
     return;
   }
@@ -152,13 +245,6 @@ document.getElementById("gateRecheckBtn").addEventListener("click", async () => 
   const passed = await checkLiffFriendship();
   showScreen(passed ? "screen-intro" : "screen-gate");
 });
-
-/* ---------------------------------------------------------
-   ▼ URLパラメータ直リンク用ヘルパー
-   --------------------------------------------------------- */
-function axisPercentsFromCode(code) {
-  return AXES.map((axis, i) => (code[i] === axis.poleB.code ? 78 : 22));
-}
 
 /* ---------------------------------------------------------
    ▼ イントロ → 質問開始
@@ -254,7 +340,7 @@ async function runAnalysisAndShowResult(withAnalysis) {
   showScreen("screen-loading");
   document.getElementById("loadingText").textContent = hasAnyUrl
     ? "サロンの情報を分析中…"
-    : "16タイプの中から診断中…";
+    : "6タイプの中から診断中…";
 
   if (hasAnyUrl && CONFIG.API_ENDPOINT) {
     state.webData = await analyzeUrls({ hp_url: hpUrl, hpb_url: hpbUrl, insta_url: instaUrl });
@@ -296,7 +382,7 @@ function computeResult() {
   });
 
   const percents = applyWebDataNudge(rawPercents, state.webData);
-  const code = AXES.map((axis, i) => (percents[i] >= 50 ? axis.poleB.code : axis.poleA.code)).join("");
+  const code = classifyType(percents);
   return { code, percents };
 }
 
@@ -333,16 +419,54 @@ function applyWebDataNudge(percents, webData) {
   return next.map((v) => Math.max(0, Math.min(100, v)));
 }
 
+/**
+ * タイプ別イラスト（images/type-xx.png 等）があれば自動的に表示し、
+ * 無ければ絵文字マスコットにフォールバックする。
+ * 少女漫画風キャラクターを用意した場合は、ここに置くだけで反映される
+ * （コード変更不要。ファイル名は images/type-{code小文字}.png）。
+ */
+function setResultMascot(code, emoji) {
+  const img = document.getElementById("resultMascotImg");
+  const emojiEl = document.getElementById("resultMascot");
+
+  img.hidden = true;
+  emojiEl.hidden = false;
+  emojiEl.textContent = emoji;
+
+  const candidate = new Image();
+  candidate.onload = () => {
+    img.src = candidate.src;
+    img.hidden = false;
+    emojiEl.hidden = true;
+  };
+  candidate.onerror = () => {
+    /* 画像が無ければ絵文字のまま表示を継続 */
+  };
+  candidate.src = `images/type-${code.toLowerCase()}.png`;
+}
+
 /* ---------------------------------------------------------
    ▼ 結果レンダリング
    --------------------------------------------------------- */
 function renderResultFromCode(code, percents, webData) {
-  const meta = TYPE_META[code];
+  const meta = TYPES6[code];
+  const group = GROUPS[meta.group];
+  const groupDark = GROUPS_DARK[meta.group];
 
-  document.getElementById("resultMascot").textContent = meta.mascot;
+  // ロールグループカラーを結果画面全体に適用（16Personalities方式）
+  const resultScreen = document.getElementById("screen-result");
+  resultScreen.style.setProperty("--result-accent", group.accent);
+  resultScreen.style.setProperty("--result-soft", group.soft);
+  resultScreen.style.setProperty("--result-accent-dark", groupDark.accent);
+  resultScreen.style.setProperty("--result-soft-dark", groupDark.soft);
+
+  setResultMascot(code, meta.mascot);
   document.getElementById("typeCode").textContent = code;
   document.getElementById("resultTitle").textContent = meta.name;
   document.getElementById("resultCatch").textContent = meta.catch;
+
+  const groupChip = document.getElementById("groupChip");
+  groupChip.textContent = `${group.name}｜${group.tagline}`;
 
   const won = AXES.map((axis, i) => {
     const pB = percents[i];
@@ -352,7 +476,6 @@ function renderResultFromCode(code, percents, webData) {
     return { axis, pole, confidence, isB, index: i };
   });
 
-  // バッジのリング（最も際立つ軸の確信度をゲージ表示）
   const standout = won.reduce((a, b) => (a.confidence >= b.confidence ? a : b));
   const ringPct = Math.round(standout.confidence);
   document.getElementById("resultBadgeRing").style.setProperty("--ring-pct", `${ringPct}%`);
@@ -363,17 +486,43 @@ function renderResultFromCode(code, percents, webData) {
 
   drawRadar(won);
 
-  // 強み一覧
+  // タイプ概要（物語調・複数段落）
+  const overviewEl = document.getElementById("overviewText");
+  overviewEl.innerHTML = meta.overview.map((p) => `<p>${p}</p>`).join("");
+
+  const quoteEl = document.getElementById("quoteText");
+  quoteEl.textContent = `“ ${meta.quote} ”`;
+
+  // 強み一覧（タイプごとに編集部が定義したもの）
   const strengthList = document.getElementById("strengthList");
   strengthList.innerHTML = "";
-  won.forEach((w) => {
+  meta.strengths.forEach((s) => {
     const row = document.createElement("div");
     row.className = "strength-row";
-    row.innerHTML = `<span class="strength-emoji">${w.pole.emoji}</span><span class="strength-text">${w.pole.strength}</span>`;
+    row.innerHTML = `<span class="strength-emoji">✓</span><span class="strength-text">${s}</span>`;
     strengthList.appendChild(row);
   });
 
-  // 軸ごとの割合バー
+  // 気をつけたいポイント
+  const cautionList = document.getElementById("cautionList");
+  cautionList.innerHTML = "";
+  meta.cautions.forEach((c) => {
+    const row = document.createElement("div");
+    row.className = "caution-row";
+    row.innerHTML = `<span class="caution-emoji">△</span><span class="caution-text">${c}</span>`;
+    cautionList.appendChild(row);
+  });
+
+  // 相性の良いタイプ
+  const compatMeta = TYPES6[meta.compatible];
+  const compatGroup = GROUPS[compatMeta.group];
+  document.getElementById("compatMascot").textContent = compatMeta.mascot;
+  document.getElementById("compatName").textContent = compatMeta.name;
+  document.getElementById("compatCatch").textContent = compatMeta.catch;
+  document.getElementById("compatLink").href = `?type=${meta.compatible}`;
+  document.getElementById("compatBadge").style.background = compatGroup.accent;
+
+  // 軸ごとの割合バー（実測データ）
   const axisBars = document.getElementById("axisBars");
   axisBars.innerHTML = "";
   AXES.forEach((axis, i) => {
@@ -394,14 +543,12 @@ function renderResultFromCode(code, percents, webData) {
     axisBars.appendChild(bar);
   });
 
-  // 伸ばすとさらに強くなる視点
+  // 伸ばすとさらに強くなる視点（実測データのうち最も拮抗している軸）
   const balancedAxis = won.reduce((a, b) => (a.confidence <= b.confidence ? a : b));
   document.getElementById("tipText").textContent = balancedAxis.pole.tip;
 
-  // 実データ分析パネル
   renderDataPanel(webData);
 
-  // ホワイトペーパーリンクにタイプコードを付与
   const wpBtn = document.getElementById("whitepaperBtn");
   wpBtn.href = `whitepaper.html?type=${code}`;
 }
@@ -481,6 +628,7 @@ function drawRadar(won) {
   const axesCount = won.length;
   const angleStep = (Math.PI * 2) / axesCount;
   const rootStyles = getComputedStyle(document.documentElement);
+  const resultStyles = getComputedStyle(document.getElementById("screen-result"));
 
   function pointFor(i, value01) {
     const angle = -Math.PI / 2 + i * angleStep;
@@ -508,7 +656,7 @@ function drawRadar(won) {
     ctx.stroke();
   }
 
-  const accent = rootStyles.getPropertyValue("--accent").trim() || "#7c3550";
+  const accent = resultStyles.getPropertyValue("--result-accent").trim() || rootStyles.getPropertyValue("--accent").trim() || "#7c3550";
   const gradient = ctx.createRadialGradient(cx, cy, 10, cx, cy, radius);
   gradient.addColorStop(0, hexWithAlpha(accent, 0.35));
   gradient.addColorStop(1, hexWithAlpha(accent, 0.08));

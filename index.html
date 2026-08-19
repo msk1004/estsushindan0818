@@ -4,9 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <title>サロン経営タイプ診断 | エステティック通信</title>
-<meta name="description" content="ホットペッパー・HP・Instagramの実データ＋8つの二択で、あなたのサロン経営タイプが16タイプの中からわかる無料診断。" />
+<meta name="description" content="ホットペッパー・HP・Instagramの実データ＋8つの二択で、あなたのサロン経営タイプが6タイプの中からわかる無料診断。" />
 <meta property="og:title" content="サロン経営タイプ診断｜エステティック通信" />
-<meta property="og:description" content="実データ×性格診断でわかる、あなたのサロン経営タイプ16診断" />
+<meta property="og:description" content="実データ×性格診断でわかる、あなたのサロン経営タイプ6診断" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>" />
 <link rel="stylesheet" href="style.css" />
 </head>
@@ -43,13 +43,13 @@
       <div class="intro-badge" aria-hidden="true">
         <span class="badge-letters" id="badgeSample">????</span>
       </div>
-      <p class="eyebrow">3分 / 無料・16タイプ診断</p>
+      <p class="eyebrow">3分 / 無料・6タイプ診断</p>
       <h1>サロン経営<span class="accent-underline">タイプ</span>診断</h1>
-      <p class="intro-lead">2択にサクサク答えるだけ。<br>ホットペッパー・HP・Instagramの<br>実データも加味して、<br><strong>16タイプ</strong>のどれかを診断します。</p>
+      <p class="intro-lead">2択にサクサク答えるだけ。<br>ホットペッパー・HP・Instagramの<br>実データも加味して、<br><strong>6タイプ</strong>のどれかを診断します。</p>
 
       <div class="intro-mascots" aria-hidden="true">
-        <span>🦉</span><span>🦊</span><span>🌸</span><span>⭐</span>
-        <span>🦋</span><span>🎯</span><span>🌊</span><span>🌟</span>
+        <span>✨</span><span>🎬</span><span>🎨</span>
+        <span>🍵</span><span>📋</span><span>📈</span>
       </div>
 
       <button class="btn btn-primary btn-lg" id="startBtn" type="button">診断をはじめる →</button>
@@ -108,7 +108,7 @@
     <!-- ===== SCREEN: LOADING ===== -->
     <section class="screen screen-loading" id="screen-loading" data-screen hidden>
       <div class="spinner" aria-hidden="true"></div>
-      <p class="loading-text" id="loadingText">16タイプの中から診断中…</p>
+      <p class="loading-text" id="loadingText">6タイプの中から診断中…</p>
     </section>
 
     <!-- ===== SCREEN: RESULT ===== -->
@@ -118,9 +118,11 @@
 
       <div class="result-header">
         <div class="result-badge-ring" id="resultBadgeRing">
+          <img class="result-mascot-img" id="resultMascotImg" alt="" hidden />
           <span class="result-mascot" id="resultMascot">🦉</span>
         </div>
-        <span class="type-code" id="typeCode">GPSI</span>
+        <span class="group-chip" id="groupChip">魅せる系｜新規開拓と拡散に強い</span>
+        <span class="type-code" id="typeCode">TC</span>
         <h1 id="resultTitle">こだわり職人型</h1>
         <p class="result-catch" id="resultCatch">新規のお客様に、自分だけの特別な一品を届ける</p>
       </div>
@@ -128,6 +130,23 @@
       <div class="standout-chip" id="standoutChip">
         <span id="standoutEmoji">🧲</span>
         <span>いちばん際立つ個性：<b id="standoutLabel">新規開拓</b> <span id="standoutPct">78%</span></span>
+      </div>
+
+      <!-- タイプ概要（物語調） -->
+      <div class="overview-card">
+        <p class="card-heading">📖 このタイプについて</p>
+        <div class="overview-text" id="overviewText"></div>
+        <p class="quote-text" id="quoteText"></p>
+      </div>
+
+      <div class="strength-card">
+        <p class="card-heading">🌟 あなたの強み</p>
+        <div class="strength-list" id="strengthList"></div>
+      </div>
+
+      <div class="caution-card">
+        <p class="card-heading">⚠️ 気をつけたいポイント</p>
+        <div class="caution-list" id="cautionList"></div>
       </div>
 
       <!-- 実データ分析パネル -->
@@ -138,20 +157,28 @@
       </div>
 
       <div class="chart-card">
-        <p class="panel-heading">🎯 4軸プロファイル</p>
+        <p class="panel-heading">🎯 4軸プロファイル（実測）</p>
         <canvas id="radarChart" width="320" height="320" role="img" aria-label="4軸の個性レーダーチャート"></canvas>
         <div class="axis-bars" id="axisBars"></div>
-      </div>
-
-      <div class="strength-card">
-        <p class="card-heading">🌟 あなたの強み</p>
-        <div class="strength-list" id="strengthList"></div>
       </div>
 
       <div class="tip-card">
         <p class="card-heading">🌱 伸ばすとさらに強くなる視点</p>
         <p class="tip-text" id="tipText"></p>
       </div>
+
+      <!-- 相性の良いタイプ -->
+      <a class="compat-card" id="compatLink" href="?type=ST">
+        <p class="card-heading">🤝 相性の良いタイプ</p>
+        <div class="compat-row">
+          <span class="compat-badge" id="compatBadge"><span id="compatMascot">📋</span></span>
+          <div>
+            <p class="compat-name" id="compatName">堅実オペレーター型</p>
+            <p class="compat-catch" id="compatCatch">数字の裏付けで、一人でも堅実に運営する</p>
+          </div>
+          <span class="compat-arrow">→</span>
+        </div>
+      </a>
 
       <div class="cta-card">
         <p class="cta-eyebrow">タイプ別に読みたい</p>
