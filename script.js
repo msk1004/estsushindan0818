@@ -548,6 +548,7 @@ function renderResultFromCode(code, percents, webData) {
   document.getElementById("tipText").textContent = balancedAxis.pole.tip;
 
   renderDataPanel(webData);
+  renderMarketingPanel(webData);
 
   const wpBtn = document.getElementById("whitepaperBtn");
   wpBtn.href = `whitepaper.html?type=${code}`;
@@ -589,6 +590,179 @@ function tile(emoji, label, value) {
     ? `<span class="data-tile-emoji">${emoji}</span><span class="data-tile-value">${value}</span><span class="data-tile-label">${label}</span>`
     : `<span class="data-tile-emoji">${emoji}</span><span class="data-tile-value data-tile-empty">—</span><span class="data-tile-label">${label}（取得不可）</span>`;
   return el;
+}
+
+/* ---------------------------------------------------------
+   ▼ マーケティング診断エンジン（SWOT / 3C / STP / スコア）
+   実際に取得できた信号（口コミ件数・評価・価格帯・メニュー構成・
+   発信有無・キーワード傾向）だけから、ルールベースで組み立てる。
+   ※ 商圏内の競合密度・人流データ等は取得していないため、
+      「商圏マッチ率」のような立地起点の指標は算出しない。
+      代わりに算出可能な「デジタル接客力スコア」として提示する。
+   --------------------------------------------------------- */
+function buildMarketingAnalysis(webData) {
+  const hp = (webData && webData.hp) || null;
+  const hpb = (webData && webData.hpb) || null;
+  const insta = (webData && webData.insta) || null;
+  if (!hp && !hpb && !insta) return null;
+
+  const strengths = [];
+  const weaknesses = [];
+  const opportunities = [];
+  const threats = [];
+
+  // ---- 強み・弱み（実測データにもとづくルール判定） ----
+  if (hpb && hpb.rating != null) {
+    if (hpb.rating >= 4.5) strengths.push(`高評価（★${hpb.rating.toFixed(1)}）を獲得できている`);
+    else if (hpb.rating < 4.0) weaknesses.push(`評価点（★${hpb.rating.toFixed(1)}）に改善余地がある可能性`);
+  }
+  if (hpb && hpb.reviewCount != null) {
+    if (hpb.reviewCount >= 100) strengths.push(`口コミ${hpb.reviewCount.toLocaleString()}件という実績の厚み`);
+    else if (hpb.reviewCount < 20) weaknesses.push("口コミ件数がまだ少なく、実績が伝わりにくい可能性");
+  }
+  const menuCats = uniqueMerge_((hpb && hpb.menuCategories) || [], (hp && hp.menuCategories) || []);
+  if (menuCats.length >= 3) strengths.push(`「${menuCats.slice(0, 3).join("・")}」など幅広いメニュー対応力`);
+  else if (menuCats.length <= 1) weaknesses.push("メニューの見せ方が単一で、比較検討時に埋もれやすい可能性");
+
+  const hasBlog = !!(hp && hp.hasBlog);
+  const hasSns = !!(hp && hp.hasSns) || !!insta;
+  if (hasBlog && hasSns) strengths.push("複数チャネル（ブログ・SNS）での情報発信ができている");
+  if (!hasBlog && !hasSns) weaknesses.push("WEB上の情報発信チャネルが少ない");
+  if (hp && hp.hasReserve === false) weaknesses.push("オンライン予約導線が見当たらない");
+
+  const keywordCounts = mergeKeywordCounts_((hpb && hpb.keywordCounts) || [], (hp && hp.keywordCounts) || []);
+  if (keywordCounts[0]) strengths.push(`サイト上で「${keywordCounts[0].word}」という印象が目立つ`);
+
+  // ---- 機会・脅威（弱みの裏返し＋一般的な業界動向。特定競合の分析ではない） ----
+  if (!hasSns) opportunities.push("Instagram等SNSでの発信を強化すると、新しい接点を増やせる余地");
+  if (hpb && hpb.priceMax != null && menuCats.length <= 2) opportunities.push("メニューを絞った高単価特化ブランディングの余地");
+  opportunities.push("LINE等での継続接点づくりは、業界的にも関心の高い領域");
+
+  threats.push("エステ市場全体はやや縮小傾向。情報発信力の差が集客格差に直結しやすい局面（業界動向）");
+  if ((hpb && hpb.reviewCount != null && hpb.reviewCount < 20) || (!hasBlog && !hasSns)) {
+    threats.push("オンラインでの信頼形成が遅れると、比較検討で選ばれにくくなるリスク");
+  }
+
+  // ---- STP（価格帯からのセグメント推定） ----
+  const priceMax = hpb && hpb.priceMax;
+  let segment = "価格情報からは判定不可";
+  let target = "—";
+  if (priceMax != null) {
+    if (priceMax >= 15000) { segment = "プレミアム層"; target = "特別な体験・高い専門性を求める層"; }
+    else if (priceMax >= 6000) { segment = "スタンダード層"; target = "品質と価格のバランスを重視する層"; }
+    else { segment = "バリュー層"; target = "気軽さ・通いやすさを重視する層"; }
+  }
+  const topStrength = strengths[0] || "着実な運営";
+  const positioning = `「${topStrength}」を軸にした、${segment}向けサロンとしての立ち位置が見えてきています。`;
+
+  // ---- 3C ----
+  const company = [];
+  if (hpb && hpb.rating != null && hpb.reviewCount != null) company.push(`評価★${hpb.rating.toFixed(1)}・口コミ${hpb.reviewCount.toLocaleString()}件`);
+  if (hpb && hpb.priceMin != null && hpb.priceMax != null) company.push(`価格帯 ¥${hpb.priceMin.toLocaleString()}〜${hpb.priceMax.toLocaleString()}`);
+  if (menuCats.length) company.push(`メニュー: ${menuCats.slice(0, 4).join("・")}`);
+  company.push(`発信: ブログ${hasBlog ? "あり" : "なし"}／SNS${hasSns ? "あり" : "なし"}`);
+
+  const customer = [];
+  if (keywordCounts.length) customer.push(`よく見えるキーワード: ${keywordCounts.slice(0, 4).map((k) => k.word).join("・")}`);
+  customer.push(`推定ターゲット: ${target}`);
+
+  const market = [
+    "エステティックサロン市場は前年度比92.1%とやや縮小局面（業界動向）",
+    "情報収集はSNS・ブログ経由が主流（業界動向）",
+  ];
+
+  // ---- デジタル接客力スコア（0〜100の合成指標） ----
+  let score = 0;
+  score += hp && hp.hasReserve ? 15 : 0;
+  score += hasBlog ? 10 : 0;
+  score += hasSns ? 10 : 0;
+  score += hpb && hpb.rating != null ? (hpb.rating / 5) * 20 : 8;
+  score += hpb && hpb.reviewCount != null ? Math.min(hpb.reviewCount, 200) / 200 * 20 : 5;
+  score += menuCats.length ? Math.min(menuCats.length, 5) / 5 * 15 : 5;
+  score += insta && insta.followers != null ? Math.min(insta.followers, 3000) / 3000 * 10 : 0;
+  score = Math.round(Math.max(0, Math.min(100, score)));
+
+  return {
+    score, keywordCounts,
+    swot: { strengths: strengths.slice(0, 4), weaknesses: weaknesses.slice(0, 3), opportunities: opportunities.slice(0, 3), threats: threats.slice(0, 2) },
+    stp: { segment, target, positioning },
+    threeC: { company: company.slice(0, 4), customer, market },
+  };
+}
+
+function uniqueMerge_(a, b) {
+  return [...new Set([...(a || []), ...(b || [])])];
+}
+
+function mergeKeywordCounts_(a, b) {
+  const map = new Map();
+  [...(a || []), ...(b || [])].forEach((k) => map.set(k.word, (map.get(k.word) || 0) + k.count));
+  return [...map.entries()].map(([word, count]) => ({ word, count })).sort((x, y) => y.count - x.count);
+}
+
+function renderMarketingPanel(webData) {
+  const panel = document.getElementById("marketingPanel");
+  const analysis = buildMarketingAnalysis(webData);
+
+  if (!analysis) {
+    panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+
+  // スコアゲージ
+  document.getElementById("mktScoreRing").style.setProperty("--ring-pct", `${analysis.score}%`);
+  document.getElementById("mktScoreValue").textContent = analysis.score;
+
+  // キーワードチップ
+  const kwWrap = document.getElementById("mktKeywords");
+  kwWrap.innerHTML = "";
+  if (analysis.keywordCounts.length) {
+    const maxCount = analysis.keywordCounts[0].count;
+    analysis.keywordCounts.slice(0, 6).forEach((k) => {
+      const chip = document.createElement("span");
+      chip.className = "kw-chip";
+      const scale = 0.85 + (k.count / maxCount) * 0.45;
+      chip.style.fontSize = `${(12 * scale).toFixed(1)}px`;
+      chip.textContent = k.word;
+      kwWrap.appendChild(chip);
+    });
+  } else {
+    kwWrap.innerHTML = `<span class="kw-empty">キーワードは検出されませんでした</span>`;
+  }
+
+  // SWOT
+  fillList_("swotStrengths", analysis.swot.strengths, "—");
+  fillList_("swotWeaknesses", analysis.swot.weaknesses, "—");
+  fillList_("swotOpportunities", analysis.swot.opportunities, "—");
+  fillList_("swotThreats", analysis.swot.threats, "—");
+
+  // 3C
+  fillList_("threeCCompany", analysis.threeC.company, "—");
+  fillList_("threeCCustomer", analysis.threeC.customer, "—");
+  fillList_("threeCMarket", analysis.threeC.market, "—");
+
+  // STP
+  document.getElementById("stpSegment").textContent = analysis.stp.segment;
+  document.getElementById("stpTarget").textContent = analysis.stp.target;
+  document.getElementById("stpPositioning").textContent = analysis.stp.positioning;
+}
+
+function fillList_(elId, items, emptyText) {
+  const el = document.getElementById(elId);
+  el.innerHTML = "";
+  if (!items.length) {
+    const li = document.createElement("li");
+    li.className = "mkt-empty";
+    li.textContent = emptyText;
+    el.appendChild(li);
+    return;
+  }
+  items.forEach((text) => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    el.appendChild(li);
+  });
 }
 
 /* ---------------------------------------------------------

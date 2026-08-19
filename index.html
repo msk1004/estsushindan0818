@@ -156,6 +156,74 @@
         <p class="data-disclaimer">※ 公開ページからの簡易自動分析です。取得できない項目もあります</p>
       </div>
 
+      <!-- マーケティング診断パネル（SWOT / 3C / STP） -->
+      <div class="marketing-panel" id="marketingPanel" hidden>
+        <div class="mkt-score-row">
+          <div class="mkt-score-ring" id="mktScoreRing">
+            <div class="mkt-score-inner">
+              <span class="mkt-score-value" id="mktScoreValue">72</span>
+              <span class="mkt-score-unit">/100</span>
+            </div>
+          </div>
+          <div class="mkt-score-copy">
+            <p class="panel-heading" style="margin-bottom:4px">📊 デジタル接客力スコア</p>
+            <p class="mkt-score-desc">口コミ・評価・発信力・メニュー構成から算出した、WEB上での接客力の目安です</p>
+          </div>
+        </div>
+
+        <div class="mkt-keywords-block">
+          <p class="mkt-subheading">🔎 よく見えるキーワード</p>
+          <div class="kw-wrap" id="mktKeywords"></div>
+        </div>
+
+        <p class="mkt-subheading">🧭 SWOT分析</p>
+        <div class="swot-grid">
+          <div class="swot-cell swot-s">
+            <p class="swot-label">強み <span>Strength</span></p>
+            <ul id="swotStrengths"></ul>
+          </div>
+          <div class="swot-cell swot-w">
+            <p class="swot-label">弱み <span>Weakness</span></p>
+            <ul id="swotWeaknesses"></ul>
+          </div>
+          <div class="swot-cell swot-o">
+            <p class="swot-label">機会 <span>Opportunity</span></p>
+            <ul id="swotOpportunities"></ul>
+          </div>
+          <div class="swot-cell swot-t">
+            <p class="swot-label">脅威 <span>Threat</span></p>
+            <ul id="swotThreats"></ul>
+          </div>
+        </div>
+
+        <p class="mkt-subheading">🔺 3C分析</p>
+        <div class="threec-row">
+          <div class="threec-card">
+            <p class="threec-label">🏠 自社</p>
+            <ul id="threeCCompany"></ul>
+          </div>
+          <div class="threec-card">
+            <p class="threec-label">🙋 顧客</p>
+            <ul id="threeCCustomer"></ul>
+          </div>
+          <div class="threec-card">
+            <p class="threec-label">🌏 市場動向</p>
+            <ul id="threeCMarket"></ul>
+          </div>
+        </div>
+
+        <p class="mkt-subheading">🎯 STP（立ち位置）</p>
+        <div class="stp-block">
+          <div class="stp-tags">
+            <span class="stp-tag">セグメント: <b id="stpSegment">—</b></span>
+            <span class="stp-tag">ターゲット: <b id="stpTarget">—</b></span>
+          </div>
+          <p class="stp-positioning" id="stpPositioning"></p>
+        </div>
+
+        <p class="data-disclaimer">※ 取得できた自社データにもとづく簡易分析です。競合店舗・商圏人流等の外部データは含みません</p>
+      </div>
+
       <div class="chart-card">
         <p class="panel-heading">🎯 4軸プロファイル（実測）</p>
         <canvas id="radarChart" width="320" height="320" role="img" aria-label="4軸の個性レーダーチャート"></canvas>

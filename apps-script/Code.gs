@@ -72,8 +72,9 @@ const ANALYZE_SHEET_NAME = "URL分析ログ";
 const ANALYZE_HEADER = [
   "timestamp", "hp_url", "hpb_url", "insta_url",
   "hpb_review_count", "hpb_rating", "hpb_price_min", "hpb_price_max", "hpb_menu_count",
+  "hpb_area", "hpb_menu_categories", "hpb_top_keyword",
   "insta_followers", "insta_posts",
-  "hp_has_blog", "hp_has_reserve", "hp_has_sns",
+  "hp_has_blog", "hp_has_reserve", "hp_has_sns", "hp_menu_categories",
 ];
 
 function handleAnalyze_(data) {
@@ -118,7 +119,7 @@ function normalizeUrl_(url) {
   return trimmed;
 }
 
-/** 自社HP: 更新体制・導線・情報量の目安を簡易分析 */
+/** 自社HP: 更新体制・導線・情報量・メニュー構成・キーワード傾向を簡易分析 */
 function analyzeOwnSite_(url) {
   const html = fetchHtml_(url);
   if (!html) return null;
@@ -133,10 +134,13 @@ function analyzeOwnSite_(url) {
     hasSns: /(instagram\.com|line\.me|lin\.ee|twitter\.com|x\.com)/i.test(html),
     hasPrice: /(料金|価格|メニュー表|¥\s?\d|\d,?\d{3}\s?円)/.test(text),
     volumeScore: Math.max(0, Math.min(100, Math.round(text.length / 60))),
+    areaText: extractAreaText_(text),
+    menuCategories: extractMenuCategories_(text),
+    keywordCounts: extractThemeKeywords_(text),
   };
 }
 
-/** ホットペッパービューティー: 口コミ件数・評価点・価格帯・メニュー数（ベストエフォート） */
+/** ホットペッパービューティー: 口コミ件数・評価点・価格帯・メニュー構成・キーワード傾向（ベストエフォート） */
 function analyzeHotPepper_(url) {
   const html = fetchHtml_(url);
   if (!html) return null;
@@ -157,7 +161,48 @@ function analyzeHotPepper_(url) {
     priceMin: priceMatch ? parseInt(priceMatch[1].replace(/,/g, ""), 10) : null,
     priceMax: priceMatch ? parseInt(priceMatch[2].replace(/,/g, ""), 10) : null,
     menuCount: menuMatch ? parseInt(menuMatch[1].replace(/,/g, ""), 10) : null,
+    areaText: extractAreaText_(text),
+    menuCategories: extractMenuCategories_(text),
+    keywordCounts: extractThemeKeywords_(text),
   };
+}
+
+/**
+ * ページ全体のテキスト（口コミ本文を含む場合はそれも対象）から、
+ * サロン経営で意味を持つ固定キーワード辞書の出現回数を数える簡易分析。
+ * DOM解析ができないGAS環境の制約上、「口コミ欄だけ」を厳密に切り出すのではなく
+ * ページ全体からの傾向として扱う（README・画面上にその旨を明記）。
+ */
+const THEME_KEYWORDS = [
+  "丁寧", "雰囲気", "清潔", "駅近", "技術力", "効果", "接客",
+  "リラックス", "落ち着い", "相談しやすい", "予約が取りやすい", "コスパ", "高級感", "アットホーム",
+];
+
+function extractThemeKeywords_(text) {
+  const counts = THEME_KEYWORDS.map((word) => {
+    const count = (text.match(new RegExp(escapeRegExp_(word), "g")) || []).length;
+    return { word, count };
+  }).filter((k) => k.count > 0);
+  counts.sort((a, b) => b.count - a.count);
+  return counts.slice(0, 8);
+}
+
+const MENU_CATEGORY_KEYWORDS = [
+  "フェイシャル", "痩身", "ブライダル", "メンズ", "脱毛", "ネイル",
+  "まつげ", "ヘッドスパ", "ボディ", "ハンド美容", "リンパ", "ハイフ", "毛穴", "美肌",
+];
+
+function extractMenuCategories_(text) {
+  return MENU_CATEGORY_KEYWORDS.filter((cat) => text.indexOf(cat) !== -1);
+}
+
+function extractAreaText_(text) {
+  const m = text.match(/([一-龥ぁ-んァ-ヶー]{2,8}駅)/);
+  return m ? m[1] : null;
+}
+
+function escapeRegExp_(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 /**
@@ -210,11 +255,15 @@ function logAnalysis_(input, result) {
       result.hpb && result.hpb.priceMin != null ? result.hpb.priceMin : "",
       result.hpb && result.hpb.priceMax != null ? result.hpb.priceMax : "",
       result.hpb && result.hpb.menuCount != null ? result.hpb.menuCount : "",
+      result.hpb && result.hpb.areaText ? result.hpb.areaText : "",
+      result.hpb && result.hpb.menuCategories ? result.hpb.menuCategories.join("/") : "",
+      result.hpb && result.hpb.keywordCounts && result.hpb.keywordCounts[0] ? result.hpb.keywordCounts[0].word : "",
       result.insta && result.insta.followers != null ? result.insta.followers : "",
       result.insta && result.insta.posts != null ? result.insta.posts : "",
       result.hp && result.hp.hasBlog != null ? result.hp.hasBlog : "",
       result.hp && result.hp.hasReserve != null ? result.hp.hasReserve : "",
       result.hp && result.hp.hasSns != null ? result.hp.hasSns : "",
+      result.hp && result.hp.menuCategories ? result.hp.menuCategories.join("/") : "",
     ]);
   } catch (err) {
     /* ログ失敗は分析結果の返却に影響させない */
