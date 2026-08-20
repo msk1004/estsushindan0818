@@ -81,11 +81,11 @@ URL入力で実データが1件でも取得できた場合、結果画面に「�
 
 ## タイプ別キャラクターアイコン（少女漫画風）の作り方
 
-`script.js` の `setResultMascot()` は、`images/type-{コード小文字}.png`（例: `images/type-tc.png`）が存在すればそれを自動表示し、無ければ絵文字にフォールバックする**画像なし運用可能な設計**。以下の6プロンプトはそれぞれ**単独でそのままChatGPTに貼り付けて使える**完成形（共通スタイル＋タイプ差分を1つの文章に統合済み）。英語で書いているのは、画風の一貫性・ディテール再現性が英語プロンプトの方が安定しやすいため。
+`script.js` の `setResultMascot()` は、`images/type-{コード小文字}.png`（例: `images/type-tc.png`）が存在すればそれを自動表示し、無ければ絵文字にフォールバックする**画像なし運用可能な設計**。以下の6プロンプトはそれぞれ**単独でそのままChatGPTに貼り付けて使える**完成形（共通スタイル＋タイプ差分を1つの文章に統合済み）。日本国内での利用を想定し、読者層（サロン経営者の大半が女性）に合わせて**20〜30代の日本人女性キャラクター**で統一している。
 
 ### 一貫性を保つコツ
 
-1. **同じChatGPTスレッド内で6枚連続生成する**（新しいチャットに分けない）。1枚目が気に入ったら「Generate the next character in the exact same art style, linework, and rendering as the previous one, now depicting: 〜」のように直前の画像を参照させると画風が安定する
+1. **同じChatGPTスレッド内で6枚連続生成する**（新しいチャットに分けない）。1枚目が気に入ったら「直前の画像とまったく同じ画風・線画・塗り方で、次は〜を描いて」のように直前の画像を参照させると画風が安定する
 2. 生成順は下記 TC→BP→AR→HS→ST→SL の順を推奨（グループごとにまとめて生成すると配色の橋渡しがしやすい）
 3. 出力は正方形（1:1）、書き出しは1024×1024px以上のPNGを推奨
 4. ファイル名は `images/type-tc.png` のように**タイプコードの小文字**にリネームしてこのフォルダの `images/` に置く（フォルダが無ければ新規作成）
@@ -94,32 +94,32 @@ URL入力で実データが1件でも取得できた場合、結果画面に「�
 
 **TC｜トレンドクリエイター型（魅せる系・コーラル）**
 ```
-Shoujo manga style character portrait illustration, Japanese anime art style. A cheerful, confident young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Short bob hairstyle with bright orange-coral highlighted streaks, a small trendy hair clip. Holding a smartphone with sparkle effects glowing around it, giving a peace sign, winking with an energetic cheerful smile. Background: soft-focus gradient in warm coral and peach tones with sparkle and star bokeh particles. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+少女漫画風のキャラクターポートレートイラスト。日本のアニメ塗りスタイル。明るく自信に満ちた20代の日本人女性、バストアップ構図、中央配置、1:1の正方形構図。繊細で柔らかい線画、大きくきらめく瞳と光の反射、優しいセルシェーディング、なめらかで艶のある肌。オレンジ〜コーラルのメッシュが入った元気な短めボブヘア、小さなトレンド感のあるヘアクリップ。スマートフォンを持ち、周りにきらきらとしたエフェクトが輝いている。ウインクしながらピースサイン、明るく元気な笑顔。背景：コーラル×ピーチのソフトフォーカスグラデーションに、星のきらめきが淡く舞う。文字・ロゴ・透かしなし、キャラクターは1人のみ。高品質なデジタルイラスト、一貫した少女漫画風の画風。
 ```
 
 **BP｜ブランドプロデューサー型（魅せる系・アンバー寄り）**
 ```
-Shoujo manga style character portrait illustration, Japanese anime art style. A stylish, composed young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Sleek semi-long hair with one side tucked behind the ear. Holding a tablet displaying a mood board, wearing a confident, intelligent, composed smile, elegant amber-and-gold accented outfit. Background: soft-focus gradient in amber and gold tones with glowing light-particle bokeh. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+少女漫画風のキャラクターポートレートイラスト。日本のアニメ塗りスタイル。落ち着きと知性を感じさせる20代後半〜30代の日本人女性、バストアップ構図、中央配置、1:1の正方形構図。繊細で柔らかい線画、大きくきらめく瞳と光の反射、優しいセルシェーディング、なめらかで艶のある肌。艶やかなセミロングヘアを片方だけ耳にかけたスタイリッシュな髪型。タブレットでムードボードを見せながら、知的で余裕のある微笑み。アンバー〜ゴールドを基調としたエレガントな衣装。背景：アンバー×ゴールドのソフトフォーカスグラデーションに、光の粒子が淡く輝く。文字・ロゴ・透かしなし、キャラクターは1人のみ。高品質なデジタルイラスト、一貫した少女漫画風の画風。
 ```
 
 **AR｜匠のアーティスト型（深める系・プラム）**
 ```
-Shoujo manga style character portrait illustration, Japanese anime art style. A calm, elegant young Japanese woman with a subtle traditional Japanese nuance, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Long straight black hair, partly pinned up. Holding a delicate beauty brush or fine cosmetology tool, wearing a gentle, composed, quietly confident smile, plum-and-rose accented outfit. Background: soft-focus gradient in plum and rose tones with softly falling flower petals. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+少女漫画風のキャラクターポートレートイラスト。日本のアニメ塗りスタイル。和のニュアンスを感じさせる落ち着いた雰囲気の20代後半〜30代の日本人女性、バストアップ構図、中央配置、1:1の正方形構図。繊細で柔らかい線画、大きくきらめく瞳と光の反射、優しいセルシェーディング、なめらかで艶のある肌。黒髪ロングストレートを一部アップにまとめた髪型。手に美容ブラシなど繊細な道具を持ち、穏やかで静かな自信を感じさせる優しい微笑み。プラム〜ローズを基調とした衣装。背景：プラム×ローズのソフトフォーカスグラデーションに、花びらが柔らかく舞い散る。文字・ロゴ・透かしなし、キャラクターは1人のみ。高品質なデジタルイラスト、一貫した少女漫画風の画風。
 ```
 
 **HS｜おもてなしの達人型（深める系・ローズピンク寄り）**
 ```
-Shoujo manga style character portrait illustration, Japanese anime art style. A warm, friendly young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Soft wavy medium-length hair. Holding a teacup, one hand gently touching her cheek, warm approachable smile, rose-pink accented outfit. Background: soft-focus gradient in warm rose-pink tones with small glowing heart-shaped light particles. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+少女漫画風のキャラクターポートレートイラスト。日本のアニメ塗りスタイル。温かく親しみやすい雰囲気の20代〜30代の日本人女性、バストアップ構図、中央配置、1:1の正方形構図。繊細で柔らかい線画、大きくきらめく瞳と光の反射、優しいセルシェーディング、なめらかで艶のある肌。ふんわりとしたウェーブのミディアムヘア。ティーカップを持ち、片手を頬に添えた仕草、温かく親しみやすい笑顔。ローズピンクを基調とした衣装。背景：暖かいローズピンクのソフトフォーカスグラデーションに、小さなハート型の光がきらめく。文字・ロゴ・透かしなし、キャラクターは1人のみ。高品質なデジタルイラスト、一貫した少女漫画風の画風。
 ```
 
 **ST｜堅実オペレーター型（支える系・ティール）**
 ```
-Shoujo manga style character portrait illustration, Japanese anime art style. A neat, composed young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Clean short hair or a tidy half-up style. Holding a clipboard, calm confident reliable expression, tidy uniform-style teal-and-blue accented outfit. Background: soft-focus gradient in teal and blue tones with faint geometric checkmark-like light patterns. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+少女漫画風のキャラクターポートレートイラスト。日本のアニメ塗りスタイル。清潔感があり落ち着いた雰囲気の20代後半〜30代の日本人女性、バストアップ構図、中央配置、1:1の正方形構図。繊細で柔らかい線画、大きくきらめく瞳と光の反射、優しいセルシェーディング、なめらかで艶のある肌。清潔感のあるショートヘア、またはきちんとまとめたハーフアップ。クリップボードを持ち、落ち着いていて信頼感のある自信に満ちた表情。ティール〜ブルーを基調とした、きちんとした制服風の衣装。背景：ティール×ブルーのソフトフォーカスグラデーションに、幾何学的なチェックマークのような光の模様が淡く浮かぶ。文字・ロゴ・透かしなし、キャラクターは1人のみ。高品質なデジタルイラスト、一貫した少女漫画風の画風。
 ```
 
 **SL｜システムリーダー型（支える系・ブルー〜インディゴ寄り）**
 ```
-Shoujo manga style character portrait illustration, Japanese anime art style. A cool, confident young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Long hair with part of it braided. Holding a laptop or a glowing graph chart, confident dignified expression, blue-and-indigo accented outfit. Background: soft-focus gradient in blue and indigo tones with glowing rising graph-line light effects. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+少女漫画風のキャラクターポートレートイラスト。日本のアニメ塗りスタイル。クールで自信に満ちた雰囲気の20代後半〜30代の日本人女性、バストアップ構図、中央配置、1:1の正方形構図。繊細で柔らかい線画、大きくきらめく瞳と光の反射、優しいセルシェーディング、なめらかで艶のある肌。一部を三つ編みにしたロングヘア。ノートパソコンや光るグラフチャートを持ち、凛とした自信に満ちた表情。ブルー〜インディゴを基調とした衣装。背景：ブルー×インディゴのソフトフォーカスグラデーションに、上昇するグラフラインの光のエフェクトが輝く。文字・ロゴ・透かしなし、キャラクターは1人のみ。高品質なデジタルイラスト、一貫した少女漫画風の画風。
 ```
 
 > 補足: 今回セッション内で実際に生成を試みたが、画像生成クレジットが不足しており見本の生成はできなかった。上記プロンプトはそのまま貼り付けて使える状態にしてある。
