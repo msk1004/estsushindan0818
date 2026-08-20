@@ -81,38 +81,46 @@ URL入力で実データが1件でも取得できた場合、結果画面に「�
 
 ## タイプ別キャラクターアイコン（少女漫画風）の作り方
 
-`script.js` の `setResultMascot()` は、`images/type-{コード小文字}.png`（例: `images/type-tc.png`）が存在すればそれを自動表示し、無ければ絵文字にフォールバックする**画像なし運用可能な設計**。以下のプロンプトでChatGPT（画像生成）を使い、6枚を用意すれば差し替え不要でそのまま反映される。
-
-### スタイル共通ルール（6枚すべてに付ける）
-
-> 少女漫画（shoujo manga）風のキャラクターポートレートイラスト。日本のアニメ塗り、繊細で柔らかい線画、大きくきらめく瞳とハイライト、優しいセルシェーディング。バストアップ構図、中央配置、背景はキャラクターごとの色味を活かしたソフトフォーカスのグラデーション＋星や花びらなどの淡いきらめき。文字・ロゴなし。1体のみ。1:1の正方形構図。高品質なデジタルイラスト。
+`script.js` の `setResultMascot()` は、`images/type-{コード小文字}.png`（例: `images/type-tc.png`）が存在すればそれを自動表示し、無ければ絵文字にフォールバックする**画像なし運用可能な設計**。以下の6プロンプトはそれぞれ**単独でそのままChatGPTに貼り付けて使える**完成形（共通スタイル＋タイプ差分を1つの文章に統合済み）。英語で書いているのは、画風の一貫性・ディテール再現性が英語プロンプトの方が安定しやすいため。
 
 ### 一貫性を保つコツ
 
-1. **同じChatGPTスレッド内で6枚連続生成する**（新しいチャットに分けない）。直前に生成した画像を参照させると画風が安定する
-2. 1枚目を生成 → 気に入ったら「このキャラクターと同じ画風・同じ塗り方で、次は◯◯のキャラクターを描いて」と続けて指示する
+1. **同じChatGPTスレッド内で6枚連続生成する**（新しいチャットに分けない）。1枚目が気に入ったら「Generate the next character in the exact same art style, linework, and rendering as the previous one, now depicting: 〜」のように直前の画像を参照させると画風が安定する
+2. 生成順は下記 TC→BP→AR→HS→ST→SL の順を推奨（グループごとにまとめて生成すると配色の橋渡しがしやすい）
 3. 出力は正方形（1:1）、書き出しは1024×1024px以上のPNGを推奨
 4. ファイル名は `images/type-tc.png` のように**タイプコードの小文字**にリネームしてこのフォルダの `images/` に置く（フォルダが無ければ新規作成）
 
-### タイプ別プロンプト（共通ルールの後に続けて入力）
+### タイプ別プロンプト（各ブロックをそのままコピー＆ペースト）
 
 **TC｜トレンドクリエイター型（魅せる系・コーラル）**
-> 元気で自信満々な短めのボブヘア、オレンジ〜コーラルのメッシュが入っている。スマートフォンを持ち、周りにきらきらエフェクト。ウインクしながらピースサイン。背景はコーラル×ピーチのグラデーションと星のきらめき。
+```
+Shoujo manga style character portrait illustration, Japanese anime art style. A cheerful, confident young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Short bob hairstyle with bright orange-coral highlighted streaks, a small trendy hair clip. Holding a smartphone with sparkle effects glowing around it, giving a peace sign, winking with an energetic cheerful smile. Background: soft-focus gradient in warm coral and peach tones with sparkle and star bokeh particles. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+```
 
 **BP｜ブランドプロデューサー型（魅せる系・アンバー寄り）**
-> セミロングの艶やかな髪を片方だけ耳にかけたスタイリッシュな女性。タブレットやムードボードを持ち、知的で余裕のある微笑み。アンバー〜ゴールドのアクセントカラーの衣装。背景はゴールドの光の粒子。
+```
+Shoujo manga style character portrait illustration, Japanese anime art style. A stylish, composed young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Sleek semi-long hair with one side tucked behind the ear. Holding a tablet displaying a mood board, wearing a confident, intelligent, composed smile, elegant amber-and-gold accented outfit. Background: soft-focus gradient in amber and gold tones with glowing light-particle bokeh. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+```
 
 **AR｜匠のアーティスト型（深める系・プラム）**
-> 黒髪ロングストレートを一部アップにまとめた、和のニュアンスがある女性。手に美容ブラシなど繊細な道具を持ち、落ち着いた優しい微笑み。プラム〜ローズのアクセントカラー。背景は柔らかい花びらが舞う演出。
+```
+Shoujo manga style character portrait illustration, Japanese anime art style. A calm, elegant young Japanese woman with a subtle traditional Japanese nuance, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Long straight black hair, partly pinned up. Holding a delicate beauty brush or fine cosmetology tool, wearing a gentle, composed, quietly confident smile, plum-and-rose accented outfit. Background: soft-focus gradient in plum and rose tones with softly falling flower petals. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+```
 
 **HS｜おもてなしの達人型（深める系・ローズピンク寄り）**
-> ふんわりウェーブのミディアムヘア。ティーカップを持ち温かい笑顔、頬に手を添えた親しみやすいポーズ。ローズピンクのアクセントカラー。背景は暖かい光と小さなハートのきらめき。
+```
+Shoujo manga style character portrait illustration, Japanese anime art style. A warm, friendly young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Soft wavy medium-length hair. Holding a teacup, one hand gently touching her cheek, warm approachable smile, rose-pink accented outfit. Background: soft-focus gradient in warm rose-pink tones with small glowing heart-shaped light particles. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+```
 
 **ST｜堅実オペレーター型（支える系・ティール）**
-> 清潔感のあるショートヘアまたはハーフアップ。クリップボードを持ち、落ち着いた自信のある表情。きちんとした制服風の衣装。ティール〜ブルーのアクセントカラー。背景はチェックマークや幾何学的な淡い模様。
+```
+Shoujo manga style character portrait illustration, Japanese anime art style. A neat, composed young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Clean short hair or a tidy half-up style. Holding a clipboard, calm confident reliable expression, tidy uniform-style teal-and-blue accented outfit. Background: soft-focus gradient in teal and blue tones with faint geometric checkmark-like light patterns. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+```
 
 **SL｜システムリーダー型（支える系・ブルー〜インディゴ寄り）**
-> クールなロングヘアの一部を三つ編みにしている。ノートパソコンやグラフチャートを持ち、自信に満ちた凛々しい表情。ブルー〜インディゴのアクセントカラー。背景は上昇するグラフラインの光のエフェクト。
+```
+Shoujo manga style character portrait illustration, Japanese anime art style. A cool, confident young Japanese woman, bust-up portrait, centered composition, 1:1 square format. Soft delicate clean line art, large sparkling detailed eyes with bright light reflections, gentle cel-shading, smooth glowing skin. Long hair with part of it braided. Holding a laptop or a glowing graph chart, confident dignified expression, blue-and-indigo accented outfit. Background: soft-focus gradient in blue and indigo tones with glowing rising graph-line light effects. No text, no logo, no watermark, single character only. High-quality digital illustration, consistent shoujo manga art style.
+```
 
 > 補足: 今回セッション内で実際に生成を試みたが、画像生成クレジットが不足しており見本の生成はできなかった。上記プロンプトはそのまま貼り付けて使える状態にしてある。
 
