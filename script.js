@@ -628,37 +628,39 @@ function buildMarketingAnalysis(webData) {
   const opportunities = [];
   const threats = [];
 
-  // ---- 強み・弱み（実測データにもとづくルール判定） ----
+  // ---- 強み・弱み（実測データにもとづくルール判定。表示用に短いコメントで統一） ----
   if (hpb && hpb.rating != null) {
-    if (hpb.rating >= 4.5) strengths.push(`高評価（★${hpb.rating.toFixed(1)}）を獲得できている`);
-    else if (hpb.rating < 4.0) weaknesses.push(`評価点（★${hpb.rating.toFixed(1)}）に改善余地がある可能性`);
+    if (hpb.rating >= 4.5) strengths.push(`高評価（★${hpb.rating.toFixed(1)}）`);
+    else if (hpb.rating < 4.0) weaknesses.push(`評価点に伸びしろ（★${hpb.rating.toFixed(1)}）`);
   }
   if (hpb && hpb.reviewCount != null) {
-    if (hpb.reviewCount >= 100) strengths.push(`口コミ${hpb.reviewCount.toLocaleString()}件という実績の厚み`);
-    else if (hpb.reviewCount < 20) weaknesses.push("口コミ件数がまだ少なく、実績が伝わりにくい可能性");
+    if (hpb.reviewCount >= 100) strengths.push(`口コミ${hpb.reviewCount.toLocaleString()}件の実績`);
+    else if (hpb.reviewCount < 20) weaknesses.push("口コミ件数がまだ少ない");
   }
   const menuCats = uniqueMerge_((hpb && hpb.menuCategories) || [], (hp && hp.menuCategories) || []);
-  if (menuCats.length >= 3) strengths.push(`「${menuCats.slice(0, 3).join("・")}」など幅広いメニュー対応力`);
-  else if (menuCats.length <= 1) weaknesses.push("メニューの見せ方が単一で、比較検討時に埋もれやすい可能性");
+  if (menuCats.length >= 3) strengths.push(`幅広いメニュー対応（${menuCats.length}分野）`);
+  else if (menuCats.length <= 1) weaknesses.push("メニューの見せ方が単一");
 
   const hasBlog = !!(hp && hp.hasBlog);
   const hasSns = !!(hp && hp.hasSns) || !!insta;
-  if (hasBlog && hasSns) strengths.push("複数チャネル（ブログ・SNS）での情報発信ができている");
-  if (!hasBlog && !hasSns) weaknesses.push("WEB上の情報発信チャネルが少ない");
-  if (hp && hp.hasReserve === false) weaknesses.push("オンライン予約導線が見当たらない");
+  if (hasBlog && hasSns) strengths.push("複数チャネルで発信中");
+  if (!hasBlog && !hasSns) weaknesses.push("発信チャネルが少ない");
+  if (hp && hp.hasReserve === false) weaknesses.push("予約導線が弱い");
 
   const keywordCounts = mergeKeywordCounts_((hpb && hpb.keywordCounts) || [], (hp && hp.keywordCounts) || []);
-  if (keywordCounts[0]) strengths.push(`サイト上で「${keywordCounts[0].word}」という印象が目立つ`);
+  if (keywordCounts[0]) strengths.push(`「${keywordCounts[0].word}」の評判が目立つ`);
 
   // ---- 機会・脅威（弱みの裏返し＋一般的な業界動向。特定競合の分析ではない） ----
-  if (!hasSns) opportunities.push("Instagram等SNSでの発信を強化すると、新しい接点を増やせる余地");
-  if (hpb && hpb.priceMax != null && menuCats.length <= 2) opportunities.push("メニューを絞った高単価特化ブランディングの余地");
-  opportunities.push("LINE等での継続接点づくりは、業界的にも関心の高い領域");
+  if (!hasSns) opportunities.push("SNS発信を強化する余地");
+  if (hpb && hpb.priceMax != null && menuCats.length <= 2) opportunities.push("高単価特化の余地");
+  opportunities.push("LINE等の継続接点づくり");
 
-  threats.push("エステ市場全体はやや縮小傾向。情報発信力の差が集客格差に直結しやすい局面（業界動向）");
+  threats.push("市場全体はやや縮小傾向（業界動向）");
   if ((hpb && hpb.reviewCount != null && hpb.reviewCount < 20) || (!hasBlog && !hasSns)) {
-    threats.push("オンラインでの信頼形成が遅れると、比較検討で選ばれにくくなるリスク");
+    threats.push("信頼形成の遅れリスク");
   }
+
+  const SWOT_MAX = { s: 4, w: 3, o: 3, t: 2 };
 
   // ---- STP（価格帯からのセグメント推定） ----
   const priceMax = hpb && hpb.priceMax;
@@ -672,21 +674,17 @@ function buildMarketingAnalysis(webData) {
   const topStrength = strengths[0] || "着実な運営";
   const positioning = `「${topStrength}」を軸にした、${segment}向けサロンとしての立ち位置が見えてきています。`;
 
-  // ---- 3C ----
-  const company = [];
-  if (hpb && hpb.rating != null && hpb.reviewCount != null) company.push(`評価★${hpb.rating.toFixed(1)}・口コミ${hpb.reviewCount.toLocaleString()}件`);
-  if (hpb && hpb.priceMin != null && hpb.priceMax != null) company.push(`価格帯 ¥${hpb.priceMin.toLocaleString()}〜${hpb.priceMax.toLocaleString()}`);
-  if (menuCats.length) company.push(`メニュー: ${menuCats.slice(0, 4).join("・")}`);
-  company.push(`発信: ブログ${hasBlog ? "あり" : "なし"}／SNS${hasSns ? "あり" : "なし"}`);
+  // ---- 3C（各カテゴリ、最も特徴的な一言だけを表示用に採用） ----
+  let companyTop = "データが十分ではありません";
+  if (hpb && hpb.rating != null && hpb.reviewCount != null) companyTop = `評価★${hpb.rating.toFixed(1)}・口コミ${hpb.reviewCount.toLocaleString()}件`;
+  else if (hpb && hpb.priceMin != null && hpb.priceMax != null) companyTop = `価格帯 ¥${hpb.priceMin.toLocaleString()}〜${hpb.priceMax.toLocaleString()}`;
+  else if (menuCats.length) companyTop = `メニュー: ${menuCats.slice(0, 3).join("・")}`;
 
-  const customer = [];
-  if (keywordCounts.length) customer.push(`よく見えるキーワード: ${keywordCounts.slice(0, 4).map((k) => k.word).join("・")}`);
-  customer.push(`推定ターゲット: ${target}`);
+  const customerTop = keywordCounts.length
+    ? `「${keywordCounts[0].word}」を評価する声が多い`
+    : `推定ターゲット: ${target}`;
 
-  const market = [
-    "エステティックサロン市場は前年度比92.1%とやや縮小局面（業界動向）",
-    "情報収集はSNS・ブログ経由が主流（業界動向）",
-  ];
+  const marketTop = "エステ市場は前年度比92.1%とやや縮小局面";
 
   // ---- デジタル接客力スコア（0〜100の合成指標） ----
   let score = 0;
@@ -701,9 +699,17 @@ function buildMarketingAnalysis(webData) {
 
   return {
     score, keywordCounts,
-    swot: { strengths: strengths.slice(0, 4), weaknesses: weaknesses.slice(0, 3), opportunities: opportunities.slice(0, 3), threats: threats.slice(0, 2) },
+    swot: {
+      strengths, weaknesses, opportunities, threats,
+      counts: {
+        s: Math.round((Math.min(strengths.length, SWOT_MAX.s) / SWOT_MAX.s) * 100),
+        w: Math.round((Math.min(weaknesses.length, SWOT_MAX.w) / SWOT_MAX.w) * 100),
+        o: Math.round((Math.min(opportunities.length, SWOT_MAX.o) / SWOT_MAX.o) * 100),
+        t: Math.round((Math.min(threats.length, SWOT_MAX.t) / SWOT_MAX.t) * 100),
+      },
+    },
     stp: { segment, target, positioning },
-    threeC: { company: company.slice(0, 4), customer, market },
+    threeC: { companyTop, customerTop, marketTop },
   };
 }
 
@@ -748,37 +754,110 @@ function renderMarketingPanel(webData) {
     kwWrap.innerHTML = `<span class="kw-empty">キーワードは検出されませんでした</span>`;
   }
 
-  // SWOT
-  fillList_("swotStrengths", analysis.swot.strengths, "—");
-  fillList_("swotWeaknesses", analysis.swot.weaknesses, "—");
-  fillList_("swotOpportunities", analysis.swot.opportunities, "—");
-  fillList_("swotThreats", analysis.swot.threats, "—");
+  // SWOT：レーダーチャート＋各象限「一番大事な一言」だけを表示
+  drawSwotRadar(analysis.swot.counts);
+  document.getElementById("swotStrengthTop").textContent = analysis.swot.strengths[0] || "特に強調できるデータなし";
+  document.getElementById("swotWeaknessTop").textContent = analysis.swot.weaknesses[0] || "目立った弱みは検出されず";
+  document.getElementById("swotOpportunityTop").textContent = analysis.swot.opportunities[0] || "—";
+  document.getElementById("swotThreatTop").textContent = analysis.swot.threats[0] || "—";
 
-  // 3C
-  fillList_("threeCCompany", analysis.threeC.company, "—");
-  fillList_("threeCCustomer", analysis.threeC.customer, "—");
-  fillList_("threeCMarket", analysis.threeC.market, "—");
+  // 3C：カテゴリごとに一言だけ
+  document.getElementById("threeCCompanyTop").textContent = analysis.threeC.companyTop;
+  document.getElementById("threeCCustomerTop").textContent = analysis.threeC.customerTop;
+  document.getElementById("threeCMarketTop").textContent = analysis.threeC.marketTop;
 
-  // STP
+  // STP：3ステップのフロー表示
   document.getElementById("stpSegment").textContent = analysis.stp.segment;
   document.getElementById("stpTarget").textContent = analysis.stp.target;
   document.getElementById("stpPositioning").textContent = analysis.stp.positioning;
 }
 
-function fillList_(elId, items, emptyText) {
-  const el = document.getElementById(elId);
-  el.innerHTML = "";
-  if (!items.length) {
-    const li = document.createElement("li");
-    li.className = "mkt-empty";
-    li.textContent = emptyText;
-    el.appendChild(li);
-    return;
+/** SWOTの検出件数（0〜100%に正規化）を4軸レーダーで可視化する */
+function drawSwotRadar(counts) {
+  const canvas = document.getElementById("swotRadarChart");
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const size = 260;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = "100%";
+  canvas.style.height = "auto";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, size, size);
+
+  const cx = size / 2;
+  const cy = size / 2;
+  const radius = 92;
+  const rootStyles = getComputedStyle(document.documentElement);
+  // 時計回り：強み(上) → 機会(右) → 脅威(下) → 弱み(左)
+  const axes = [
+    { key: "s", label: "強み", emoji: "💪", value: counts.s, color: rootStyles.getPropertyValue("--swot-s").trim() },
+    { key: "o", label: "機会", emoji: "🌱", value: counts.o, color: rootStyles.getPropertyValue("--swot-o").trim() },
+    { key: "t", label: "脅威", emoji: "⛈️", value: counts.t, color: rootStyles.getPropertyValue("--swot-t").trim() },
+    { key: "w", label: "弱み", emoji: "⚠️", value: counts.w, color: rootStyles.getPropertyValue("--swot-w").trim() },
+  ];
+  const angleStep = (Math.PI * 2) / axes.length;
+
+  function pointFor(i, value01) {
+    const angle = -Math.PI / 2 + i * angleStep;
+    const r = radius * value01;
+    return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
   }
-  items.forEach((text) => {
-    const li = document.createElement("li");
-    li.textContent = text;
-    el.appendChild(li);
+
+  ctx.strokeStyle = rootStyles.getPropertyValue("--line").trim() || "#eee";
+  ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 4; ring++) {
+    ctx.beginPath();
+    axes.forEach((_, i) => {
+      const [x, y] = pointFor(i, ring / 4);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.stroke();
+  }
+  axes.forEach((_, i) => {
+    const [x, y] = pointFor(i, 1);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  });
+
+  const accent = rootStyles.getPropertyValue("--accent").trim() || "#ff6f9c";
+  ctx.beginPath();
+  axes.forEach((a, i) => {
+    const norm = Math.max(a.value, 6) / 100;
+    const [x, y] = pointFor(i, norm);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = hexWithAlpha(accent, 0.16);
+  ctx.fill();
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  axes.forEach((a, i) => {
+    const norm = Math.max(a.value, 6) / 100;
+    const [x, y] = pointFor(i, norm);
+    ctx.beginPath();
+    ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = a.color || accent;
+    ctx.fill();
+    ctx.strokeStyle = rootStyles.getPropertyValue("--surface").trim() || "#fff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  axes.forEach((a, i) => {
+    const [ex, ey] = pointFor(i, 1.22);
+    ctx.font = "16px sans-serif";
+    ctx.fillText(a.emoji, ex, ey - 7);
+    ctx.font = "700 10.5px sans-serif";
+    ctx.fillStyle = a.color || accent;
+    ctx.fillText(a.label, ex, ey + 9);
   });
 }
 

@@ -803,75 +803,116 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 .kw-empty { font-size: 12px; color: var(--ink-faint); }
 
-.swot-grid {
+/* ---------- SWOTレーダー ---------- */
+.swot-radar-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#swotRadarChart { max-width: 220px; width: 100%; height: auto; }
+
+.swot-comments {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+  width: 100%;
+  margin-top: 14px;
 }
 
-.swot-cell {
-  border-radius: 12px;
-  padding: 12px 13px;
-  min-height: 96px;
-}
-
-.swot-label {
+.swot-comment {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
   font-size: 11.5px;
-  font-weight: 700;
-  margin: 0 0 6px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 8px 10px;
 }
 
-.swot-label span { font-weight: 400; opacity: 0.75; font-size: 10px; }
+.swot-comment-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
 
-.swot-cell ul { margin: 0; padding-left: 16px; }
-.swot-cell li { font-size: 11.5px; line-height: 1.55; margin-bottom: 4px; }
-.swot-cell li:last-child { margin-bottom: 0; }
-.mkt-empty { color: var(--ink-faint); list-style: none; margin-left: -16px; }
+.swot-comment b { font-size: 10.5px; flex-shrink: 0; }
 
-.swot-s { background: var(--swot-s-soft); }
-.swot-s .swot-label { color: var(--swot-s); }
-.swot-w { background: var(--swot-w-soft); }
-.swot-w .swot-label { color: var(--swot-w); }
-.swot-o { background: var(--swot-o-soft); }
-.swot-o .swot-label { color: var(--swot-o); }
-.swot-t { background: var(--swot-t-soft); }
-.swot-t .swot-label { color: var(--swot-t); }
+.swot-s .swot-comment-dot, .swot-s b { background: var(--swot-s); color: var(--swot-s); }
+.swot-w .swot-comment-dot, .swot-w b { background: var(--swot-w); color: var(--swot-w); }
+.swot-o .swot-comment-dot, .swot-o b { background: var(--swot-o); color: var(--swot-o); }
+.swot-t .swot-comment-dot, .swot-t b { background: var(--swot-t); color: var(--swot-t); }
 
+/* ---------- 3C（アイコン＋一言） ---------- */
 .threec-row {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
-.threec-card {
+.threec-stat {
   background: var(--surface-raised);
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px 14px;
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
 }
 
-.threec-label { font-size: 12px; font-weight: 700; color: var(--ink); margin: 0 0 6px; }
-.threec-card ul { margin: 0; padding-left: 16px; }
-.threec-card li { font-size: 12px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 3px; }
-.threec-card li:last-child { margin-bottom: 0; }
+.threec-stat-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+.threec-stat-label { font-size: 10.5px; font-weight: 700; color: var(--ink-faint); margin: 0 0 4px; }
+.threec-stat-comment { font-size: 11px; color: var(--ink); font-weight: 700; line-height: 1.4; margin: 0; }
 
-.stp-block {
+/* ---------- STPフロー ---------- */
+.stp-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.stp-flow-step {
+  flex: 1;
   background: var(--result-soft, var(--accent-soft));
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 10px 8px;
+  text-align: center;
+  min-width: 0;
 }
 
-.stp-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.stp-flow-step-final {
+  background: var(--result-accent, var(--accent));
+}
 
-.stp-tag {
+.stp-flow-tag {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--result-accent, var(--accent));
+  margin-bottom: 3px;
+}
+
+.stp-flow-step-final .stp-flow-tag { color: rgba(255, 255, 255, 0.85); }
+
+.stp-flow-value {
+  display: block;
   font-size: 11px;
-  background: var(--surface-raised);
-  border-radius: 999px;
-  padding: 5px 11px;
-  color: var(--ink-soft);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+  overflow-wrap: break-word;
 }
 
-.stp-tag b { color: var(--result-accent, var(--accent)); }
+.stp-flow-step-final .stp-flow-value { color: #fff; }
+
+.stp-flow-arrow { color: var(--ink-faint); font-size: 13px; flex-shrink: 0; }
 
 .stp-positioning {
   font-size: 12.5px;

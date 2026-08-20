@@ -181,49 +181,53 @@
         </div>
 
         <p class="mkt-subheading">🧭 SWOT分析</p>
-        <div class="swot-grid">
-          <div class="swot-cell swot-s">
-            <p class="swot-label">強み <span>Strength</span></p>
-            <ul id="swotStrengths"></ul>
-          </div>
-          <div class="swot-cell swot-w">
-            <p class="swot-label">弱み <span>Weakness</span></p>
-            <ul id="swotWeaknesses"></ul>
-          </div>
-          <div class="swot-cell swot-o">
-            <p class="swot-label">機会 <span>Opportunity</span></p>
-            <ul id="swotOpportunities"></ul>
-          </div>
-          <div class="swot-cell swot-t">
-            <p class="swot-label">脅威 <span>Threat</span></p>
-            <ul id="swotThreats"></ul>
+        <div class="swot-radar-card">
+          <canvas id="swotRadarChart" width="260" height="260" role="img" aria-label="SWOT分析レーダーチャート"></canvas>
+          <div class="swot-comments">
+            <div class="swot-comment swot-s"><span class="swot-comment-dot"></span><b>強み</b><span id="swotStrengthTop"></span></div>
+            <div class="swot-comment swot-o"><span class="swot-comment-dot"></span><b>機会</b><span id="swotOpportunityTop"></span></div>
+            <div class="swot-comment swot-w"><span class="swot-comment-dot"></span><b>弱み</b><span id="swotWeaknessTop"></span></div>
+            <div class="swot-comment swot-t"><span class="swot-comment-dot"></span><b>脅威</b><span id="swotThreatTop"></span></div>
           </div>
         </div>
 
         <p class="mkt-subheading">🔺 3C分析</p>
         <div class="threec-row">
-          <div class="threec-card">
-            <p class="threec-label">🏠 自社</p>
-            <ul id="threeCCompany"></ul>
+          <div class="threec-stat">
+            <span class="threec-stat-icon">🏠</span>
+            <p class="threec-stat-label">自社</p>
+            <p class="threec-stat-comment" id="threeCCompanyTop"></p>
           </div>
-          <div class="threec-card">
-            <p class="threec-label">🙋 顧客</p>
-            <ul id="threeCCustomer"></ul>
+          <div class="threec-stat">
+            <span class="threec-stat-icon">🙋</span>
+            <p class="threec-stat-label">顧客</p>
+            <p class="threec-stat-comment" id="threeCCustomerTop"></p>
           </div>
-          <div class="threec-card">
-            <p class="threec-label">🌏 市場動向</p>
-            <ul id="threeCMarket"></ul>
+          <div class="threec-stat">
+            <span class="threec-stat-icon">🌏</span>
+            <p class="threec-stat-label">市場</p>
+            <p class="threec-stat-comment" id="threeCMarketTop"></p>
           </div>
         </div>
 
         <p class="mkt-subheading">🎯 STP（立ち位置）</p>
-        <div class="stp-block">
-          <div class="stp-tags">
-            <span class="stp-tag">セグメント: <b id="stpSegment">—</b></span>
-            <span class="stp-tag">ターゲット: <b id="stpTarget">—</b></span>
+        <div class="stp-flow">
+          <div class="stp-flow-step">
+            <span class="stp-flow-tag">セグメント</span>
+            <span class="stp-flow-value" id="stpSegment">—</span>
           </div>
-          <p class="stp-positioning" id="stpPositioning"></p>
+          <span class="stp-flow-arrow">→</span>
+          <div class="stp-flow-step">
+            <span class="stp-flow-tag">ターゲット</span>
+            <span class="stp-flow-value" id="stpTarget">—</span>
+          </div>
+          <span class="stp-flow-arrow">→</span>
+          <div class="stp-flow-step stp-flow-step-final">
+            <span class="stp-flow-tag">ポジショニング</span>
+            <span class="stp-flow-value">立ち位置</span>
+          </div>
         </div>
+        <p class="stp-positioning" id="stpPositioning"></p>
 
         <p class="data-disclaimer">※ 取得できた自社データにもとづく簡易分析です。競合店舗・商圏人流等の外部データは含みません</p>
       </div>
