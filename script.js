@@ -178,6 +178,26 @@ function classifyType(percents) {
   return best;
 }
 
+/**
+ * イントロ画面の6タイルにも、images/type-xx.png があれば自動で反映する。
+ * 無ければ絵文字のまま（setResultMascotと同じフェイルオープン設計）。
+ */
+function initIntroMascots() {
+  document.querySelectorAll(".intro-mascot-tile").forEach((tile) => {
+    const code = tile.dataset.typeCode;
+    const candidate = new Image();
+    candidate.onload = () => {
+      tile.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = candidate.src;
+      img.alt = "";
+      tile.appendChild(img);
+    };
+    candidate.src = `images/type-${code.toLowerCase()}.png`;
+  });
+}
+initIntroMascots();
+
 /* ---------------------------------------------------------
    ▼ 状態管理
    --------------------------------------------------------- */
