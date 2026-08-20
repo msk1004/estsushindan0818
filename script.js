@@ -549,9 +549,6 @@ function renderResultFromCode(code, percents, webData) {
 
   renderDataPanel(webData);
   renderMarketingPanel(webData);
-
-  const wpBtn = document.getElementById("whitepaperBtn");
-  wpBtn.href = `whitepaper.html?type=${code}`;
 }
 
 function renderDataPanel(webData) {
