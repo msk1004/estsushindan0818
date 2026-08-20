@@ -72,15 +72,15 @@ const QUESTIONS = [
    最も近いものへ分類する（最近傍法）。
    --------------------------------------------------------- */
 const GROUPS = {
-  miseru: { name: "魅せる系", tagline: "新規開拓と拡散に強い", accent: "#c8672c", soft: "#f7e3d1" },
-  fukameru: { name: "深める系", tagline: "関係性と世界観づくりに強い", accent: "#7c3550", soft: "#f4e3e9" },
-  sasaeru: { name: "支える系", tagline: "仕組みと安定運営に強い", accent: "#2c6b74", soft: "#dcebec" },
+  miseru: { name: "魅せる系", tagline: "新規開拓と拡散に強い", accent: "#ff7a95", soft: "#ffe3ea" },
+  fukameru: { name: "深める系", tagline: "関係性と世界観づくりに強い", accent: "#e0559a", soft: "#fbe0ee" },
+  sasaeru: { name: "支える系", tagline: "仕組みと安定運営に強い", accent: "#b478c2", soft: "#f3e4f7" },
 };
 
 const GROUPS_DARK = {
-  miseru: { accent: "#e69257", soft: "#3a2a1c" },
-  fukameru: { accent: "#e08aa6", soft: "#3a2530" },
-  sasaeru: { accent: "#6fb9c2", soft: "#1e3236" },
+  miseru: { accent: "#ff9db0", soft: "#3a2430" },
+  fukameru: { accent: "#ef85bd", soft: "#3a2432" },
+  sasaeru: { accent: "#cf9edb", soft: "#332a3a" },
 };
 
 const TYPES6 = {

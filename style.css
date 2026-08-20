@@ -3,81 +3,81 @@
    ========================================================== */
 
 :root {
-  --bg: #f6f3ee;
-  --surface: #fffdfa;
+  --bg: #fff6f9;
+  --surface: #ffffff;
   --surface-raised: #ffffff;
-  --ink: #262220;
-  --ink-soft: #5c544d;
-  --ink-faint: #948b81;
-  --line: #e3dccf;
-  --line-strong: #d2c8b8;
-  --accent: #7c3550;
-  --accent-soft: #f4e3e9;
-  --accent-2: #a1731f;
-  --accent-2-soft: #f3e6ce;
-  --pole-a: #7c3550;
-  --pole-b: #3c5c78;
+  --ink: #3d2b34;
+  --ink-soft: #8b6b78;
+  --ink-faint: #c79bad;
+  --line: #fbdce8;
+  --line-strong: #f6b9d1;
+  --accent: #ff6f9c;
+  --accent-soft: #ffe6f0;
+  --accent-2: #ff8fb8;
+  --accent-2-soft: #fff0f6;
+  --pole-a: #ff6f9c;
+  --pole-b: #c48fd6;
   --line-brand: #06c755;
   --line-brand-dark: #05a648;
-  --shadow: 0 1px 2px rgba(38, 34, 32, 0.06), 0 16px 32px -16px rgba(38, 34, 32, 0.28);
-  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --radius-lg: 22px;
-  --radius-md: 14px;
-  --panel-bg: linear-gradient(165deg, #ffffff, #f4f0ea 120%);
-  --swot-s: #3f7d52; --swot-s-soft: #dcefe1;
-  --swot-w: #b5473f; --swot-w-soft: #f5e0de;
-  --swot-o: #2f6b8f; --swot-o-soft: #dce9f0;
-  --swot-t: #a1731f; --swot-t-soft: #f3e6ce;
+  --shadow: 0 1px 2px rgba(255, 111, 156, 0.08), 0 16px 32px -16px rgba(255, 111, 156, 0.35);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --radius-lg: 26px;
+  --radius-md: 18px;
+  --panel-bg: linear-gradient(165deg, #ffffff, #fff0f6 120%);
+  --swot-s: #45b787; --swot-s-soft: #e2f7ee;
+  --swot-w: #ff6f81; --swot-w-soft: #ffe7ea;
+  --swot-o: #57a8e0; --swot-o-soft: #e5f3fc;
+  --swot-t: #e5a83c; --swot-t-soft: #fdf1de;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1c1916;
-    --surface: #242019;
-    --surface-raised: #2b261f;
-    --ink: #f2ece2;
-    --ink-soft: #c7bcad;
-    --ink-faint: #8d8175;
-    --line: #3a332a;
-    --line-strong: #4a4235;
-    --accent: #e08aa6;
-    --accent-soft: #3a2530;
-    --accent-2: #d6a94e;
-    --accent-2-soft: #3a3020;
-    --pole-a: #e08aa6;
-    --pole-b: #8fb0c9;
+    --bg: #241820;
+    --surface: #2e1e28;
+    --surface-raised: #35222d;
+    --ink: #ffe9f2;
+    --ink-soft: #d9aec2;
+    --ink-faint: #9c7488;
+    --line: #472c3b;
+    --line-strong: #5c3a4c;
+    --accent: #ff85ab;
+    --accent-soft: #3f2431;
+    --accent-2: #ffa0c4;
+    --accent-2-soft: #3a2530;
+    --pole-a: #ff85ab;
+    --pole-b: #cf9edb;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 32px -16px rgba(0, 0, 0, 0.65);
     --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    --panel-bg: linear-gradient(165deg, #2b261f, #211d18 120%);
-    --swot-s: #6fbf8a; --swot-s-soft: #223a2a;
-    --swot-w: #e08078; --swot-w-soft: #3a2523;
-    --swot-o: #7fb8d6; --swot-o-soft: #1f3138;
-    --swot-t: #d6a94e; --swot-t-soft: #3a3020;
+    --panel-bg: linear-gradient(165deg, #35222d, #291b23 120%);
+    --swot-s: #6fdba8; --swot-s-soft: #1f3a2c;
+    --swot-w: #ff8f9c; --swot-w-soft: #3a2328;
+    --swot-o: #7fc2ea; --swot-o-soft: #1c3140;
+    --swot-t: #f0c265; --swot-t-soft: #3a2f1c;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #1c1916;
-  --surface: #242019;
-  --surface-raised: #2b261f;
-  --ink: #f2ece2;
-  --ink-soft: #c7bcad;
-  --ink-faint: #8d8175;
-  --line: #3a332a;
-  --line-strong: #4a4235;
-  --accent: #e08aa6;
-  --accent-soft: #3a2530;
-  --accent-2: #d6a94e;
-  --accent-2-soft: #3a3020;
-  --pole-a: #e08aa6;
-  --pole-b: #8fb0c9;
+  --bg: #241820;
+  --surface: #2e1e28;
+  --surface-raised: #35222d;
+  --ink: #ffe9f2;
+  --ink-soft: #d9aec2;
+  --ink-faint: #9c7488;
+  --line: #472c3b;
+  --line-strong: #5c3a4c;
+  --accent: #ff85ab;
+  --accent-soft: #3f2431;
+  --accent-2: #ffa0c4;
+  --accent-2-soft: #3a2530;
+  --pole-a: #ff85ab;
+  --pole-b: #cf9edb;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 32px -16px rgba(0, 0, 0, 0.65);
   --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  --panel-bg: linear-gradient(165deg, #2b261f, #211d18 120%);
-  --swot-s: #6fbf8a; --swot-s-soft: #223a2a;
-  --swot-w: #e08078; --swot-w-soft: #3a2523;
-  --swot-o: #7fb8d6; --swot-o-soft: #1f3138;
-  --swot-t: #d6a94e; --swot-t-soft: #3a3020;
+  --panel-bg: linear-gradient(165deg, #35222d, #291b23 120%);
+  --swot-s: #6fdba8; --swot-s-soft: #1f3a2c;
+  --swot-w: #ff8f9c; --swot-w-soft: #3a2328;
+  --swot-o: #7fc2ea; --swot-o-soft: #1c3140;
+  --swot-t: #f0c265; --swot-t-soft: #3a2f1c;
 }
 
 * { box-sizing: border-box; }
@@ -91,16 +91,19 @@ html, body {
 }
 
 body {
-  font-family: "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-family: "M PLUS Rounded 1c", "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
   touch-action: manipulation;
+  background-image: radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 45%),
+    radial-gradient(circle at 90% 18%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 40%);
+  background-attachment: fixed;
 }
 
 h1, h2 {
-  font-family: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", serif;
-  font-weight: 700;
+  font-family: "M PLUS Rounded 1c", "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-weight: 800;
   text-wrap: balance;
   margin: 0;
 }
@@ -386,7 +389,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 }
 
 .choice-vs {
-  font-family: "Yu Mincho", serif;
+  font-family: "M PLUS Rounded 1c", "Yu Gothic", sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: var(--ink-faint);
@@ -544,7 +547,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 }
 
 .type-code {
-  font-family: "Yu Mincho", serif;
+  font-family: "M PLUS Rounded 1c", "Yu Gothic", sans-serif;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.14em;
@@ -607,7 +610,7 @@ main { flex: 1; display: flex; flex-direction: column; }
   border-left: 3px solid var(--result-accent);
   background: var(--result-soft);
   border-radius: 0 10px 10px 0;
-  font-family: "Yu Mincho", serif;
+  font-family: "M PLUS Rounded 1c", "Yu Gothic", sans-serif;
   font-size: 13.5px;
   color: var(--ink);
   font-weight: 700;
